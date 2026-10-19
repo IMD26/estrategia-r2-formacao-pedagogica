@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Raio-X Comercial R2 Vendas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Diagnóstico comercial da R2 com dados do CRM e das conversas dos consultores.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Source+Serif+4:wght@400;600&display=swap">
+<style>
+:root{--font-anthropic-sans:'Source Sans 3',system-ui,-apple-system,'Segoe UI',sans-serif;--font-anthropic-serif:'Source Serif 4',Georgia,serif;color-scheme:light}
+body{background:#f5f8fd;color:#0d1f3f;margin:0}
+[hidden]{display:none!important}
+.r2-grupo{margin:22px 0 2px;font-size:1.2rem;color:#123f8b;font-family:var(--font-anthropic-serif);font-weight:600}
+.r2-grupo:first-child{margin-top:0}
+.r2-origem{font-size:.86rem;color:#3b5079;font-style:italic}
+.r2-decisao{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}
+.r2-decisao span{font-size:.9rem;font-weight:600;color:#3b5079}
+.r2-decisao button,.r2-resumo-dec button{font:inherit;font-size:.92rem;font-weight:600;border:1.5px solid #c3d5f3;background:#fff;color:#123f8b;border-radius:999px;padding:6px 14px;cursor:pointer}
+.r2-decisao button:hover,.r2-resumo-dec button:hover{border-color:#2b5fc0}
+.r2-decisao button[aria-pressed="true"]{background:#123f8b;border-color:#123f8b;color:#fff}
+.r2-decisao button:focus-visible,.r2-resumo-dec button:focus-visible{outline:3px solid #ffcc00;outline-offset:2px}
+.r2-resumo-dec{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:18px;padding-top:14px;border-top:1px solid #d6e1f3}
+.r2-resumo-dec p{margin:0;color:#3b5079}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+window.__DATA = {"totais": [{"leads_total": 884, "em_aberto": 730, "matriculados": 85, "perdidos": 69, "fichas_total": 113, "efetivadas": 87, "aguardando_secretaria": 25, "desistiu": 1, "resgate_total": 39, "resgate_parados": 38, "inicio": "2026-09-30", "fim": "2026-10-19", "conversao_pct": 9.6, "efetivacao_pct": 77.0, "tempo_medio_dias": 0}], "funil": [{"ordem": 1, "etapa": "Novo Lead", "cards": 167}, {"ordem": 2, "etapa": "Qualificação e Elegibilidade", "cards": 174}, {"ordem": 3, "etapa": "Objetivo e Apresentação", "cards": 91}, {"ordem": 4, "etapa": "Proposta Apresentada", "cards": 58}, {"ordem": 5, "etapa": "Negociação", "cards": 10}, {"ordem": 6, "etapa": "Intenção de Matrícula", "cards": 8}, {"ordem": 7, "etapa": "Follow-up 1", "cards": 131}, {"ordem": 8, "etapa": "Follow-up 2", "cards": 30}, {"ordem": 9, "etapa": "Follow-up 3", "cards": 14}, {"ordem": 10, "etapa": "Ficha enviada", "cards": 25}, {"ordem": 11, "etapa": "Ficha preenchida", "cards": 22}, {"ordem": 12, "etapa": "Matriculado", "cards": 85}, {"ordem": 13, "etapa": "Perdido", "cards": 69}], "consultores": [{"consultor": "Julia Cotrim", "leads": 230, "em_aberto": 200, "matriculados": 18, "perdidos": 12, "fichas": 22, "efetivadas": 17, "aguardando": 5, "conversao_pct": 7.8}, {"consultor": "Francisco Lindomar", "leads": 157, "em_aberto": 143, "matriculados": 9, "perdidos": 5, "fichas": 17, "efetivadas": 11, "aguardando": 6, "conversao_pct": 5.7}, {"consultor": "André Sene", "leads": 138, "em_aberto": 79, "matriculados": 31, "perdidos": 28, "fichas": 39, "efetivadas": 31, "aguardando": 7, "conversao_pct": 22.5}, {"consultor": "Michael Figueiredo", "leads": 127, "em_aberto": 103, "matriculados": 8, "perdidos": 16, "fichas": 10, "efetivadas": 8, "aguardando": 2, "conversao_pct": 6.3}, {"consultor": "Alan Gabriel", "leads": 125, "em_aberto": 111, "matriculados": 13, "perdidos": 1, "fichas": 16, "efetivadas": 13, "aguardando": 3, "conversao_pct": 10.4}, {"consultor": "Douglas Nascimento", "leads": 86, "em_aberto": 73, "matriculados": 6, "perdidos": 7, "fichas": 9, "efetivadas": 7, "aguardando": 2, "conversao_pct": 7.0}], "funil_consultor": [{"etapa": "Novo Lead", "consultor": "Douglas Nascimento", "cards": 32}, {"etapa": "Novo Lead", "consultor": "Sem consultor", "cards": 16}, {"etapa": "Novo Lead", "consultor": "Francisco Lindomar", "cards": 65}, {"etapa": "Novo Lead", "consultor": "Michael Figueiredo", "cards": 27}, {"etapa": "Novo Lead", "consultor": "Alan Gabriel", "cards": 27}, {"etapa": "Qualificação e Elegibilidade", "consultor": "Julia Cotrim", "cards": 97}, {"etapa": "Qualificação e Elegibilidade", "consultor": "Alan Gabriel", "cards": 14}, {"etapa": "Qualificação e Elegibilidade", "consultor": "André Sene", "cards": 7}, {"etapa": "Qualificação e Elegibilidade", "consultor": "Francisco Lindomar", "cards": 22}, {"etapa": "Qualificação e Elegibilidade", "consultor": "Douglas Nascimento", "cards": 10}, {"etapa": "Qualificação e Elegibilidade", "consultor": "Sem consultor", "cards": 3}, {"etapa": "Qualificação e Elegibilidade", "consultor": "Michael Figueiredo", "cards": 21}, {"etapa": "Objetivo e Apresentação", "consultor": "Douglas Nascimento", "cards": 9}, {"etapa": "Objetivo e Apresentação", "consultor": "Julia Cotrim", "cards": 39}, {"etapa": "Objetivo e Apresentação", "consultor": "Francisco Lindomar", "cards": 30}, {"etapa": "Objetivo e Apresentação", "consultor": "André Sene", "cards": 2}, {"etapa": "Objetivo e Apresentação", "consultor": "Michael Figueiredo", "cards": 10}, {"etapa": "Objetivo e Apresentação", "consultor": "Sem consultor", "cards": 1}, {"etapa": "Proposta Apresentada", "consultor": "Douglas Nascimento", "cards": 13}, {"etapa": "Proposta Apresentada", "consultor": "Julia Cotrim", "cards": 26}, {"etapa": "Proposta Apresentada", "consultor": "Michael Figueiredo", "cards": 7}, {"etapa": "Proposta Apresentada", "consultor": "Francisco Lindomar", "cards": 12}, {"etapa": "Negociação", "consultor": "Julia Cotrim", "cards": 4}, {"etapa": "Negociação", "consultor": "Michael Figueiredo", "cards": 3}, {"etapa": "Negociação", "consultor": "André Sene", "cards": 3}, {"etapa": "Intenção de Matrícula", "consultor": "André Sene", "cards": 4}, {"etapa": "Intenção de Matrícula", "consultor": "Francisco Lindomar", "cards": 1}, {"etapa": "Intenção de Matrícula", "consultor": "Julia Cotrim", "cards": 2}, {"etapa": "Intenção de Matrícula", "consultor": "Michael Figueiredo", "cards": 1}, {"etapa": "Perdido", "consultor": "Julia Cotrim", "cards": 12}, {"etapa": "Ficha preenchida", "consultor": "Julia Cotrim", "cards": 5}, {"etapa": "Follow-up 1", "consultor": "André Sene", "cards": 25}, {"etapa": "Ficha enviada", "consultor": "Douglas Nascimento", "cards": 4}, {"etapa": "Matriculado", "consultor": "Alan Gabriel", "cards": 13}, {"etapa": "Follow-up 2", "consultor": "André Sene", "cards": 23}, {"etapa": "Follow-up 1", "consultor": "Alan Gabriel", "cards": 64}, {"etapa": "Ficha preenchida", "consultor": "André Sene", "cards": 6}, {"etapa": "Ficha enviada", "consultor": "André Sene", "cards": 7}, {"etapa": "Matriculado", "consultor": "Julia Cotrim", "cards": 18}, {"etapa": "Matriculado", "consultor": "Francisco Lindomar", "cards": 9}, {"etapa": "Ficha enviada", "consultor": "Alan Gabriel", "cards": 2}, {"etapa": "Ficha preenchida", "consultor": "Francisco Lindomar", "cards": 5}, {"etapa": "Matriculado", "consultor": "Michael Figueiredo", "cards": 8}, {"etapa": "Matriculado", "consultor": "André Sene", "cards": 31}, {"etapa": "Perdido", "consultor": "André Sene", "cards": 28}, {"etapa": "Ficha preenchida", "consultor": "Douglas Nascimento", "cards": 2}, {"etapa": "Follow-up 1", "consultor": "Michael Figueiredo", "cards": 17}, {"etapa": "Ficha preenchida", "consultor": "Alan Gabriel", "cards": 3}, {"etapa": "Matriculado", "consultor": "Douglas Nascimento", "cards": 6}, {"etapa": "Ficha enviada", "consultor": "Michael Figueiredo", "cards": 6}, {"etapa": "Follow-up 3", "consultor": "André Sene", "cards": 2}, {"etapa": "Ficha enviada", "consultor": "Julia Cotrim", "cards": 3}, {"etapa": "Perdido", "consultor": "Michael Figueiredo", "cards": 16}, {"etapa": "Follow-up 2", "consultor": "Michael Figueiredo", "cards": 4}, {"etapa": "Follow-up 2", "consultor": "Julia Cotrim", "cards": 1}, {"etapa": "Follow-up 1", "consultor": "Julia Cotrim", "cards": 24}, {"etapa": "Ficha preenchida", "consultor": "Michael Figueiredo", "cards": 1}, {"etapa": "Follow-up 3", "consultor": "Douglas Nascimento", "cards": 3}, {"etapa": "Perdido", "consultor": "Douglas Nascimento", "cards": 7}, {"etapa": "Follow-up 3", "consultor": "Michael Figueiredo", "cards": 6}, {"etapa": "Perdido", "consultor": "Alan Gabriel", "cards": 1}, {"etapa": "Perdido", "consultor": "Francisco Lindomar", "cards": 5}, {"etapa": "Ficha enviada", "consultor": "Francisco Lindomar", "cards": 3}, {"etapa": "Follow-up 3", "consultor": "Francisco Lindomar", "cards": 3}, {"etapa": "Follow-up 2", "consultor": "Francisco Lindomar", "cards": 1}, {"etapa": "Follow-up 1", "consultor": "Francisco Lindomar", "cards": 1}, {"etapa": "Follow-up 2", "consultor": "Alan Gabriel", "cards": 1}], "origens": [{"origem": "Google orgânico (busca)", "leads": 383, "conversaram": 235, "fichas": 36, "matriculados": 23, "perdidos": 32, "conversao_pct": 6.0, "ficha_pct": 9.4}, {"origem": "Google Ads", "leads": 214, "conversaram": 113, "fichas": 12, "matriculados": 9, "perdidos": 23, "conversao_pct": 4.2, "ficha_pct": 5.6}, {"origem": "Direto (digitou o endereço)", "leads": 72, "conversaram": 39, "fichas": 14, "matriculados": 8, "perdidos": 4, "conversao_pct": 11.1, "ficha_pct": 19.4}, {"origem": "Landing page", "leads": 57, "conversaram": 29, "fichas": 3, "matriculados": 2, "perdidos": 0, "conversao_pct": 3.5, "ficha_pct": 5.3}, {"origem": "Artigos do blog", "leads": 50, "conversaram": 36, "fichas": 2, "matriculados": 0, "perdidos": 2, "conversao_pct": 0.0, "ficha_pct": 4.0}, {"origem": "Indicação e referência", "leads": 26, "conversaram": 18, "fichas": 9, "matriculados": 6, "perdidos": 3, "conversao_pct": 23.1, "ficha_pct": 34.6}, {"origem": "Orgânico (outros, origem não identificada)", "leads": 22, "conversaram": 20, "fichas": 21, "matriculados": 13, "perdidos": 1, "conversao_pct": 59.1, "ficha_pct": 95.5}, {"origem": "Lead antigo que voltou a conversar", "leads": 13, "conversaram": 12, "fichas": 12, "matriculados": 8, "perdidos": 1, "conversao_pct": 61.5, "ficha_pct": 92.3}, {"origem": "Instagram (link da bio)", "leads": 11, "conversaram": 7, "fichas": 2, "matriculados": 0, "perdidos": 1, "conversao_pct": 0.0, "ficha_pct": 18.2}, {"origem": "Ex-aluno / rematrícula", "leads": 11, "conversaram": 11, "fichas": 11, "matriculados": 9, "perdidos": 0, "conversao_pct": 81.8, "ficha_pct": 100.0}, {"origem": "Ficha (link do consultor)", "leads": 9, "conversaram": 3, "fichas": 9, "matriculados": 7, "perdidos": 0, "conversao_pct": 77.8, "ficha_pct": 100.0}, {"origem": "ChatGPT / assistentes de IA", "leads": 8, "conversaram": 4, "fichas": 1, "matriculados": 0, "perdidos": 0, "conversao_pct": 0.0, "ficha_pct": 12.5}, {"origem": "Meta Ads", "leads": 6, "conversaram": 3, "fichas": 0, "matriculados": 0, "perdidos": 1, "conversao_pct": 0.0, "ficha_pct": 0.0}, {"origem": "Redes sociais (outras)", "leads": 2, "conversaram": 0, "fichas": 0, "matriculados": 0, "perdidos": 1, "conversao_pct": 0.0, "ficha_pct": 0.0}], "leads_por_dia": [{"dia": "2026-09-30", "leads": 5}, {"dia": "2026-10-01", "leads": 14}, {"dia": "2026-10-02", "leads": 15}, {"dia": "2026-10-03", "leads": 36}, {"dia": "2026-10-04", "leads": 27}, {"dia": "2026-10-05", "leads": 73}, {"dia": "2026-10-06", "leads": 63}, {"dia": "2026-10-07", "leads": 52}, {"dia": "2026-10-08", "leads": 59}, {"dia": "2026-10-09", "leads": 52}, {"dia": "2026-10-10", "leads": 10}, {"dia": "2026-10-11", "leads": 22}, {"dia": "2026-10-12", "leads": 45}, {"dia": "2026-10-13", "leads": 69}, {"dia": "2026-10-14", "leads": 85}, {"dia": "2026-10-15", "leads": 92}, {"dia": "2026-10-16", "leads": 59}, {"dia": "2026-10-17", "leads": 44}, {"dia": "2026-10-18", "leads": 44}], "leads_por_hora": [{"hora": 0, "leads": 13}, {"hora": 1, "leads": 8}, {"hora": 2, "leads": 7}, {"hora": 3, "leads": 3}, {"hora": 4, "leads": 2}, {"hora": 5, "leads": 5}, {"hora": 6, "leads": 10}, {"hora": 7, "leads": 21}, {"hora": 8, "leads": 49}, {"hora": 9, "leads": 67}, {"hora": 10, "leads": 69}, {"hora": 11, "leads": 59}, {"hora": 12, "leads": 72}, {"hora": 13, "leads": 53}, {"hora": 14, "leads": 65}, {"hora": 15, "leads": 72}, {"hora": 16, "leads": 61}, {"hora": 17, "leads": 46}, {"hora": 18, "leads": 47}, {"hora": 19, "leads": 39}, {"hora": 20, "leads": 19}, {"hora": 21, "leads": 40}, {"hora": 22, "leads": 27}, {"hora": 23, "leads": 30}], "leads_por_dia_semana": [{"dia_semana": "Segunda", "leads": 118}, {"dia_semana": "Terça", "leads": 132}, {"dia_semana": "Quarta", "leads": 142}, {"dia_semana": "Quinta", "leads": 165}, {"dia_semana": "Sexta", "leads": 126}, {"dia_semana": "Sábado", "leads": 90}, {"dia_semana": "Domingo", "leads": 93}], "leads_parados": [{"consultor": "André Sene", "abertos": 79, "mais_de_15_dias": 1, "entre_8_e_14_dias": 29, "sem_conversa": 4, "novo_lead": 0}, {"consultor": "Julia Cotrim", "abertos": 201, "mais_de_15_dias": 4, "entre_8_e_14_dias": 43, "sem_conversa": 7, "novo_lead": 0}, {"consultor": "Alan Gabriel", "abertos": 111, "mais_de_15_dias": 6, "entre_8_e_14_dias": 65, "sem_conversa": 21, "novo_lead": 27}, {"consultor": "Francisco Lindomar", "abertos": 143, "mais_de_15_dias": 38, "entre_8_e_14_dias": 43, "sem_conversa": 52, "novo_lead": 65}, {"consultor": "Michael Figueiredo", "abertos": 103, "mais_de_15_dias": 8, "entre_8_e_14_dias": 40, "sem_conversa": 15, "novo_lead": 27}, {"consultor": "Douglas Nascimento", "abertos": 73, "mais_de_15_dias": 2, "entre_8_e_14_dias": 25, "sem_conversa": 12, "novo_lead": 32}, {"consultor": "Sem consultor", "abertos": 20, "mais_de_15_dias": 0, "entre_8_e_14_dias": 0, "sem_conversa": 16, "novo_lead": 16}], "followup_toques": [{"toques": "Nenhum toque depois do silêncio", "conversas": 31}, {"toques": "1 toque", "conversas": 46}, {"toques": "2 toques", "conversas": 43}, {"toques": "3 toques", "conversas": 14}, {"toques": "4 toques ou mais", "conversas": 40}], "tempos_resposta": [{"consultor": "Julia", "cards_lidos": 224, "com_conversa": 212, "primeira_resposta_min": 60.5, "pct_ate_5min": 18, "pct_ate_1h": 48, "pct_sem_resposta_humana": 4, "retorno_min": 6.0, "pct_msgs_lead_sem_retorno": 5, "ate_ficha_horas": 19.9, "fichas_com_horario": 24, "n_primeira": 186, "n_retorno": 761}, {"consultor": "Lindomar", "cards_lidos": 151, "com_conversa": 94, "primeira_resposta_min": 43.0, "pct_ate_5min": 13, "pct_ate_1h": 60, "pct_sem_resposta_humana": 2, "retorno_min": 10.0, "pct_msgs_lead_sem_retorno": 5, "ate_ficha_horas": 3.6, "fichas_com_horario": 12, "n_primeira": 80, "n_retorno": 275}, {"consultor": "André", "cards_lidos": 134, "com_conversa": 122, "primeira_resposta_min": 12.0, "pct_ate_5min": 41, "pct_ate_1h": 63, "pct_sem_resposta_humana": 1, "retorno_min": 1.0, "pct_msgs_lead_sem_retorno": 2, "ate_ficha_horas": 2.1, "fichas_com_horario": 40, "n_primeira": 119, "n_retorno": 1218}, {"consultor": "Alan", "cards_lidos": 122, "com_conversa": 101, "primeira_resposta_min": 109.0, "pct_ate_5min": 9, "pct_ate_1h": 34, "pct_sem_resposta_humana": 8, "retorno_min": 12.0, "pct_msgs_lead_sem_retorno": 5, "ate_ficha_horas": 47.6, "fichas_com_horario": 15, "n_primeira": 92, "n_retorno": 446}, {"consultor": "Michael", "cards_lidos": 119, "com_conversa": 102, "primeira_resposta_min": 38.0, "pct_ate_5min": 22, "pct_ate_1h": 59, "pct_sem_resposta_humana": 1, "retorno_min": 4.0, "pct_msgs_lead_sem_retorno": 2, "ate_ficha_horas": 17.6, "fichas_com_horario": 14, "n_primeira": 93, "n_retorno": 544}, {"consultor": "Douglas", "cards_lidos": 83, "com_conversa": 68, "primeira_resposta_min": 27.0, "pct_ate_5min": 20, "pct_ate_1h": 56, "pct_sem_resposta_humana": 8, "retorno_min": 7.0, "pct_msgs_lead_sem_retorno": 2, "ate_ficha_horas": 6.1, "fichas_com_horario": 10, "n_primeira": 56, "n_retorno": 450}], "comportamento": [{"consultor": "André", "conversas": 103, "msgs_consultor_por_conversa": 20.6, "pct_audio": 30, "pct_chegou_na_ficha": 42}, {"consultor": "Julia", "conversas": 144, "msgs_consultor_por_conversa": 12.1, "pct_audio": 18, "pct_chegou_na_ficha": 17}, {"consultor": "Michael", "conversas": 78, "msgs_consultor_por_conversa": 16.7, "pct_audio": 43, "pct_chegou_na_ficha": 18}, {"consultor": "Lindomar", "conversas": 63, "msgs_consultor_por_conversa": 9.9, "pct_audio": 45, "pct_chegou_na_ficha": 19}, {"consultor": "Alan", "conversas": 88, "msgs_consultor_por_conversa": 11.4, "pct_audio": 51, "pct_chegou_na_ficha": 20}, {"consultor": "Douglas", "conversas": 52, "msgs_consultor_por_conversa": 23.4, "pct_audio": 26, "pct_chegou_na_ficha": 23}], "cadencia_tabela": [{"ordem": 1, "situacao": "1. Parou depois da apresentação do curso", "toque": "1º, conexão", "texto": "“Conseguiu analisar as informações sobre sua nova formação? Ficou alguma dúvida…”", "move": "Sim", "sugestao": "Manter."}, {"ordem": 2, "situacao": "1. Parou depois da apresentação do curso", "toque": "2º, objeção e valor", "texto": "“…existe algum ponto sobre a formação que ainda esteja dificultando sua decisão?”", "move": "Não", "sugestao": "Abrir com “Estou retomando seu atendimento sobre a formação.” e anexar um material."}, {"ordem": 3, "situacao": "1. Parou depois da apresentação do curso", "toque": "3º, decisão", "texto": "“…gostaria de saber se essa formação ainda está nos seus planos ou se prefere deixar para outro momento.”", "move": "Não", "sugestao": "Trocar por “Você ainda tem interesse em seguir com a formação?”"}, {"ordem": 4, "situacao": "2. Parou depois de receber os valores", "toque": "1º, conexão", "texto": "“Passando para saber se conseguiu avaliar nossa proposta. Ficou alguma dúvida sobre as condições…”", "move": "Não", "sugestao": "Trocar por “Conseguiu analisar as informações da proposta?” e oferecer duas opções de pagamento."}, {"ordem": 5, "situacao": "2. Parou depois de receber os valores", "toque": "2º, objeção e valor", "texto": "“…o que mais está pesando na sua decisão neste momento?”", "move": "Não", "sugestao": "Abrir com “Estou retomando seu atendimento sobre a formação.” e anexar o preço total comparado."}, {"ordem": 6, "situacao": "2. Parou depois de receber os valores", "toque": "3º, decisão", "texto": "“…estou finalizando meu acompanhamento sobre sua formação.”", "move": "Não", "sugestao": "Usar “Estou finalizando os atendimentos que ficaram em aberto.”"}, {"ordem": 7, "situacao": "3. Parou depois dos procedimentos de matrícula", "toque": "1º, conexão", "texto": "“Conseguiu dar andamento à sua matrícula?…”", "move": "Não precisa", "sugestao": "O card já está em Ficha enviada, à frente do Follow-up, e não volta de coluna. Incluir a data da próxima turma."}, {"ordem": 8, "situacao": "3. Parou depois dos procedimentos de matrícula", "toque": "2º, impedimento", "texto": "“…Houve alguma dificuldade com os documentos, o pagamento ou alguma outra etapa?”", "move": "Não precisa", "sugestao": "Manter e listar o que falta."}, {"ordem": 9, "situacao": "3. Parou depois dos procedimentos de matrícula", "toque": "3º, decisão", "texto": "“…como ainda não tivemos a confirmação da sua matrícula, gostaria de saber se pretende continuar…”", "move": "Não precisa", "sugestao": "Manter. Sem resposta ou com “não”, usar as frases de encerramento (Perdido)."}], "objecoes": [{"item": "Preço (achou caro, pediu desconto)", "vezes": 66, "exemplo": "Achei bem pesado!"}, {"item": "“Vou pensar”", "vezes": 56, "exemplo": "Vou pensar"}, {"item": "Desconfiança (MEC, legalidade, golpe)", "vezes": 51, "exemplo": "Golpista"}, {"item": "Não consegue ir ao presencial / polo", "vezes": 35, "exemplo": "eu moro no Rio"}, {"item": "Quer menos de 12 meses", "vezes": 31, "exemplo": "Em 6 meses!!!"}, {"item": "Adiou: sem dinheiro agora", "vezes": 31, "exemplo": "por enquanto financeiro"}, {"item": "Comparou com outra instituição", "vezes": 26, "exemplo": "Recebi proposta melhor."}, {"item": "Quer 100% online", "vezes": 24, "exemplo": "Tem EAD?"}, {"item": "Não tem graduação", "vezes": 20, "exemplo": "não"}, {"item": "Depende de outra pessoa (cônjuge, família)", "vezes": 19, "exemplo": "Na verdade é p minha filha"}, {"item": "Outras", "vezes": 12, "exemplo": "Não consigo agora!"}, {"item": "Falta de tempo", "vezes": 10, "exemplo": "Tempo."}, {"item": "Estágio", "vezes": 8, "exemplo": "Sem estágio é mais em conta?"}], "dores": [{"item": "Distância do presencial", "vezes": 50, "exemplo": "Estou com dificuldade de ir"}, {"item": "Aperto financeiro", "vezes": 38, "exemplo": "essa fatura já tá muito alta"}, {"item": "Documentos perdidos ou desatualizados", "vezes": 29, "exemplo": "Esperando o diploma"}, {"item": "Exigência de concurso ou edital", "vezes": 27, "exemplo": "prestes a ser chamado no concurso"}, {"item": "Pouco tempo na rotina", "vezes": 27, "exemplo": "Eu trabalho embarcado em navio"}, {"item": "Pressa", "vezes": 20, "exemplo": "no menor tempo possivel"}, {"item": "Informações contraditórias", "vezes": 18, "exemplo": "Cada um diz uma coisa."}, {"item": "Dá aula sem habilitação", "vezes": 8, "exemplo": "Eu não possuo graduação ainda não"}, {"item": "Outras", "vezes": 7, "exemplo": "Como funciona a ATP?"}, {"item": "Carreira estagnada", "vezes": 4, "exemplo": "Estagnei e cansei de advogar."}, {"item": "Medo de voltar a estudar", "vezes": 1, "exemplo": "Estou com medo de não dar conta de estudar"}], "duvidas": [{"item": "Valor e forma de pagamento", "vezes": 277, "exemplo": "E valor?"}, {"item": "Duração", "vezes": 144, "exemplo": "Em 6 meses"}, {"item": "Presencial / polo", "vezes": 124, "exemplo": "Onde é o polo?"}, {"item": "MEC e validade do diploma", "vezes": 118, "exemplo": "Em qual faculdade"}, {"item": "Aproveitamento de disciplinas", "vezes": 80, "exemplo": "E faz corte de disciplina?"}, {"item": "Início da turma e vencimento", "vezes": 76, "exemplo": "Pode ser dia 05"}, {"item": "Estágio", "vezes": 65, "exemplo": "E o estágio ?"}, {"item": "Documentos da matrícula", "vezes": 62, "exemplo": "Você precisa do histórico né ?"}, {"item": "Vale para concurso? Posso dar aula?", "vezes": 61, "exemplo": "Consegue tirar Cref"}, {"item": "Plataforma e provas", "vezes": 48, "exemplo": "Qual o dia da aula ao vivo?"}, {"item": "Grade e contrato", "vezes": 39, "exemplo": "E a grade de biologia"}, {"item": "Outras", "vezes": 28, "exemplo": "Como funciona a ATP?"}, {"item": "Prazo do diploma", "vezes": 23, "exemplo": "Pode me enviar o modelo do diploma?"}, {"item": "TCC", "vezes": 22, "exemplo": "Aí o tcc? Obrigatório tbm?"}, {"item": "Fazer dois cursos", "vezes": 17, "exemplo": "Se eu me matricular 2 tem desconto???"}], "desejos": [{"item": "Dar aula", "vezes": 108, "exemplo": "lecionar"}, {"item": "Rapidez", "vezes": 75, "exemplo": "Queria uma rápida"}, {"item": "Passar em concurso", "vezes": 73, "exemplo": "prestar concurso"}, {"item": "Estudar online", "vezes": 41, "exemplo": "se é 100% EAD?"}, {"item": "Aproveitar a graduação", "vezes": 35, "exemplo": "tenho duas grades de dispensa"}, {"item": "Formalizar quem já dá aula", "vezes": 22, "exemplo": "dou aula em escola técnica"}, {"item": "Retomar um curso", "vezes": 14, "exemplo": "Vai ter que me rematricular"}, {"item": "Mudar de carreira", "vezes": 10, "exemplo": "Mudar de área profissional."}, {"item": "Progressão salarial", "vezes": 9, "exemplo": "Progressão na carreira"}, {"item": "Outros", "vezes": 9, "exemplo": "Não consigo agora!"}, {"item": "Realizar um sonho", "vezes": 6, "exemplo": "Eu quero poder ser pedagoga"}], "cursos": [{"curso": "Pedagogia (para graduados)", "procurados": 83, "fechados": 16}, {"curso": "Ainda não escolheu o curso", "procurados": 74, "fechados": 10}, {"curso": "Matemática", "procurados": 64, "fechados": 11}, {"curso": "Biologia", "procurados": 47, "fechados": 6}, {"curso": "Artes Visuais", "procurados": 33, "fechados": 2}, {"curso": "Pedagogia (para quem tem magistério)", "procurados": 32, "fechados": 11}, {"curso": "Sociologia", "procurados": 32, "fechados": 8}, {"curso": "História", "procurados": 28, "fechados": 9}, {"curso": "Educação Física (licenciatura)", "procurados": 26, "fechados": 5}, {"curso": "Pediu “complementação” sem dizer a área", "procurados": 22, "fechados": 3}, {"curso": "Letras Inglês", "procurados": 20, "fechados": 1}, {"curso": "Letras Português", "procurados": 18, "fechados": 5}, {"curso": "Filosofia", "procurados": 17, "fechados": 4}, {"curso": "Química", "procurados": 15, "fechados": 2}, {"curso": "Música", "procurados": 15, "fechados": 4}, {"curso": "Física", "procurados": 14, "fechados": 2}, {"curso": "Ciências da Religião", "procurados": 12, "fechados": 3}, {"curso": "Geografia", "procurados": 9, "fechados": 2}, {"curso": "Educação Física (bacharelado)", "procurados": 8, "fechados": 1}, {"curso": "Teologia (bacharelado)", "procurados": 6, "fechados": 0}, {"curso": "Tecnólogo Gestão Pública", "procurados": 6, "fechados": 2}, {"curso": "Pós-graduação", "procurados": 5, "fechados": 2}, {"curso": "Educação Especial", "procurados": 5, "fechados": 0}, {"curso": "Tecnólogo Seg. Privada", "procurados": 5, "fechados": 1}, {"curso": "Tecnólogo Seg. Pública", "procurados": 4, "fechados": 2}, {"curso": "Letras Port./Inglês", "procurados": 3, "fechados": 1}, {"curso": "Letras Port./Espanhol", "procurados": 3, "fechados": 1}, {"curso": "Técnico", "procurados": 2, "fechados": 0}, {"curso": "Letras Libras", "procurados": 2, "fechados": 0}, {"curso": "Biblioteconomia", "procurados": 1, "fechados": 0}], "cursos_faltantes": [{"curso": "Primeira graduação (quem não tem nenhuma)", "pedidos": 11}, {"curso": "Licenciatura em Administração / Contábeis / Gestão", "pedidos": 7}, {"curso": "Pós-graduação (perguntaram se tem)", "pedidos": 7}, {"curso": "Licenciatura em Informática / Robótica", "pedidos": 5}, {"curso": "Tecnólogo (obras, automação, outros)", "pedidos": 4}, {"curso": "Outros", "pedidos": 4}, {"curso": "Licenciatura em Enfermagem / Saúde", "pedidos": 4}, {"curso": "Formação pedagógica para ensino técnico", "pedidos": 2}, {"curso": "Serviço Social / Relações Internacionais", "pedidos": 1}, {"curso": "Ciências da Natureza", "pedidos": 1}, {"curso": "Graduação em Psicopedagogia", "pedidos": 1}, {"curso": "Magistério (nível médio)", "pedidos": 1}, {"curso": "Psicologia", "pedidos": 1}, {"curso": "Curso livre / extensão (perguntaram se tem)", "pedidos": 1}], "perfil_origem": [{"graduacao": "Licenciado ou pedagogo", "leads": 63}, {"graduacao": "Tecnólogo", "leads": 58}, {"graduacao": "Outra", "leads": 57}, {"graduacao": "Saúde", "leads": 56}, {"graduacao": "Administração / Contábeis", "leads": 45}, {"graduacao": "Direito", "leads": 42}, {"graduacao": "Magistério", "leads": 40}, {"graduacao": "Ainda cursando", "leads": 37}, {"graduacao": "Engenharia / Arquitetura", "leads": 37}, {"graduacao": "Bacharel na área do curso", "leads": 36}, {"graduacao": "Ex-aluno da R2", "leads": 26}, {"graduacao": "Sem graduação", "leads": 22}, {"graduacao": "Tecnologia da informação", "leads": 20}, {"graduacao": "Comunicação", "leads": 11}, {"graduacao": "Graduação no exterior", "leads": 3}], "estados": [{"estado": "SP", "leads": 21}, {"estado": "RJ", "leads": 18}, {"estado": "DF", "leads": 12}, {"estado": "PR", "leads": 10}, {"estado": "ES", "leads": 7}, {"estado": "MG", "leads": 7}, {"estado": "RS", "leads": 6}, {"estado": "BA", "leads": 5}, {"estado": "MS", "leads": 3}, {"estado": "PA", "leads": 2}, {"estado": "SC", "leads": 2}, {"estado": "CE", "leads": 2}, {"estado": "PE", "leads": 2}, {"estado": "RO", "leads": 2}, {"estado": "AP", "leads": 1}, {"estado": "Exterior", "leads": 1}, {"estado": "MT", "leads": 1}, {"estado": "PI", "leads": 1}, {"estado": "PB", "leads": 1}, {"estado": "AL", "leads": 1}, {"estado": "GO", "leads": 1}, {"estado": "RN", "leads": 1}, {"estado": "AM", "leads": 1}], "onde_parou": [{"ponto": "O consultor escreveu por último e o lead sumiu", "conversas": 137}, {"ponto": "O lead nunca escreveu (só recebeu mensagem do consultor)", "conversas": 46}, {"ponto": "O lead escreveu por último e ficou sem resposta", "conversas": 22}, {"ponto": "Recebeu a ficha e não preencheu", "conversas": 3}], "amostra": [{"recorte": "Novo Lead", "cards": 167, "conversas_lidas": 65, "sem_conversa": 102}, {"recorte": "Qualificação", "cards": 174, "conversas_lidas": 162, "sem_conversa": 12}, {"recorte": "Objetivo e Apresentação", "cards": 91, "conversas_lidas": 87, "sem_conversa": 4}, {"recorte": "Proposta, Negociação, Intenção", "cards": 76, "conversas_lidas": 73, "sem_conversa": 3}, {"recorte": "Follow-ups 1 a 3", "cards": 175, "conversas_lidas": 173, "sem_conversa": 2}, {"recorte": "Ficha enviada e preenchida", "cards": 47, "conversas_lidas": 43, "sem_conversa": 4}, {"recorte": "Perdido", "cards": 69, "conversas_lidas": 50, "sem_conversa": 19}, {"recorte": "Matriculado", "cards": 85, "conversas_lidas": 81, "sem_conversa": 4}], "motivos_perda": [{"motivo": "Já é aluno (procurou outro setor)", "cards": 10}, {"motivo": "Não elegível (sem graduação)", "cards": 9}, {"motivo": "Contato inválido", "cards": 8}, {"motivo": "Sem motivo informado", "cards": 8}, {"motivo": "Sem retorno / sem interesse", "cards": 6}, {"motivo": "Preço", "cards": 3}, {"motivo": "Duplicado", "cards": 2}, {"motivo": "Não temos o curso", "cards": 1}, {"motivo": "Achou que era golpe", "cards": 1}, {"motivo": "Queria empréstimo", "cards": 1}], "plano_vendas": [{"ordem": 1, "urgente": true, "titulo": "Reequilibrar a distribuição de leads entre os consultores", "porque": "Desde 30/09 a distribuição ficou desigual: Julia 231 leads, Lindomar 157, André 138, Michael 127, Alan 125 e Douglas 86 (média de 144). Com mais leads, o tempo da 1ª resposta da Julia subiu para 60 minutos e só 48% dos leads dela foram atendidos em até 1 hora.", "como": "Manter a Julia fora da roleta até os outros alcançarem (ela está 87 acima da média). Quem mais precisa receber: Douglas (58 abaixo), Alan (19) e Michael (17). Conferir a contagem de cada um uma vez por semana.", "meta": "Diferença entre o consultor com mais leads e o com menos abaixo de 25 em 7 dias.", "prazo": "Esta semana", "grupo": "Plano de ação de vendas", "origem": "Dados do CRM"}, {"ordem": 2, "urgente": true, "titulo": "Zerar o acúmulo de leads parados do Lindomar", "porque": "O Lindomar tem 65 cards em Novo Lead, 52 cards sem nenhuma conversa e 38 abertos há mais de 15 dias, enquanto os outros cinco somam 21 cards com mais de 15 dias. A regra combinada em 02/09 era de 15 dias por consultor (exceção até 30), mas hoje há 59 cards abertos há mais de 15 dias no total.", "como": "Reabrir em lote os cards sem conversa com a mensagem do dia e encerrar com motivo os que não responderem; transferir uma parte para quem estiver abaixo da média (ver item 1). Revisar, uma vez por semana, os cards com mais de 15 dias, usando a coluna de exceções para os casos que precisam de mais tempo.", "meta": "Nenhum card sem conversa há mais de 24 horas e menos de 15 cards abertos há mais de 15 dias no time todo.", "prazo": "7 dias", "grupo": "Plano de ação de vendas", "origem": "Dados do CRM e regra de 15 dias da reunião de 02/09"}, {"ordem": 3, "urgente": true, "titulo": "Ouvir e replicar o atendimento do André", "porque": "Mesma roleta, resultado diferente: o André converte 22,5% (31 de 138) e a média do time é 9,6%. Ele responde o lead em 12 minutos (mediana; os outros, de 27 a 109), responde de volta em 1 minuto (os outros, de 4 a 12), envia a ficha 2 horas depois do primeiro contato (Alan, 48 horas; Julia, 20 h; Michael, 18 h) e 42% das conversas dele chegam à ficha, contra 17% a 23% nos outros.", "como": "Ouvir os áudios e ler 10 conversas dele que fecharam; escrever o roteiro com as perguntas que ele faz, a ordem em que apresenta o valor e como pede a ficha; reunião de 30 minutos com o time e acompanhamento de duas conversas de cada consultor.", "meta": "Conversão média do time de 9,6% para 14% em 30 dias.", "prazo": "30 dias", "grupo": "Plano de ação de vendas", "origem": "Dados do CRM e das conversas"}, {"ordem": 4, "urgente": true, "titulo": "Responder em até 5 minutos e não deixar lead sem dono", "porque": "A mediana da primeira resposta vai de 12 a 109 minutos e só 9% a 41% dos leads recebem resposta em até 5 minutos. O Alan atende só 34% dos leads em até 1 hora. Além disso, 102 dos 167 cards de Novo Lead não têm nenhuma conversa e 21 cards estão sem consultor atribuído.", "como": "Meta de 5 minutos em horário comercial; relatório diário no DKX com os cards sem conversa e sem consultor; atribuir hoje os 21 cards sem dono; combinar com o Alan um plano para reduzir os 109 minutos antes de dar mais leads a ele.", "meta": "Mediana de primeira resposta abaixo de 10 minutos para todos e zero cards sem consultor.", "prazo": "7 dias", "grupo": "Plano de ação de vendas", "origem": "Dados do CRM e das conversas"}, {"ordem": 5, "urgente": false, "titulo": "Ancorar o valor e mostrar o preço total", "porque": "Preço é a objeção nº 1 (66 conversas) e 26 leads comparam com outra instituição. Técnica que está funcionando no time: ancorar no valor cheio (matrícula de R$ 199) e só depois apresentar a condição, para o lead enxergar o esforço e a vantagem; e deixar escrito que o valor é por curso e por pessoa (um lead fechou dois cursos achando que o valor valia para os dois e desistiu). Comparação de exemplo: um concorrente cobra 24 parcelas de R$ 199, o que dá R$ 4.776 em 2 anos; a R2 cobra 12 de R$ 249 mais R$ 99 de matrícula, o que dá R$ 3.087 em 1 ano: R$ 1.689 (35%) a menos.", "como": "Padronizar a mensagem de valores com a âncora, o aviso “valores por curso” e uma pergunta aberta no final para a conversa não morrer; criar uma imagem com a comparação do total para enviar junto; levar o material também para quem decide com a família (19 conversas dizem “vou falar com minha esposa”).", "meta": "Reduzir “vou pensar” e “achei caro” em 20% no próximo mapeamento.", "prazo": "15 dias", "grupo": "Plano de ação de vendas", "origem": "Prática do time e dados do CRM"}, {"ordem": 6, "urgente": false, "titulo": "Fazer a cadência de follow-up de 3 toques valer para todos", "porque": "Foi padronizada a cadência D+1, D+2 e D+3. Entre as 174 conversas em follow-up ou perdidas em que o lead parou de responder, 31 não tiveram nenhum toque, 46 tiveram só um e 43 tiveram dois; apenas 54 (31%) chegaram a três ou mais. Em 137 das 208 conversas paradas o consultor escreveu por último e o lead sumiu.", "como": "Cada toque com um propósito (conexão, objeção e valor, decisão), usando as frases já padronizadas; no 2º toque, material novo (preço total comparado, depoimento ou aula experimental) em vez de repetir a pergunta. Aproveitar a técnica de quatro mensagens em quatro dias que o Alan descreveu em reunião.", "meta": "100% dos leads que pararam recebendo três toques antes de ir para Perdido.", "prazo": "15 dias", "grupo": "Plano de ação de vendas", "origem": "Cadência padronizada em 12/10 e dados das conversas"}, {"ordem": 7, "urgente": false, "titulo": "Plantão de sábado e Resgate com lista priorizada", "porque": "No plantão de 17/10, o André trabalhou 60 leads frios e o resultado foi 2 fichas enviadas, 3 leads para o ano seguinte e 1 que fechou com outra instituição; o restante não respondeu. O Resgate tem 38 cards parados em “Entrou no Resgate” e nenhum passou para a Tentativa 1.", "como": "Começar o plantão pelos leads com ficha enviada e sem preenchimento, depois por quem pediu para o ano seguinte, e só depois pelos sem resposta; trabalhar o Resgate com as três tentativas combinadas.", "meta": "Zero cards parados em “Entrou no Resgate” por mais de 7 dias.", "prazo": "Próximo sábado", "grupo": "Plano de ação de vendas", "origem": "Dados do CRM"}, {"ordem": 8, "urgente": false, "titulo": "Um roteiro único de respostas e um PDF oficial sobre o MEC", "porque": "18 conversas reclamam de informações contraditórias (TCC, estágio, carga horária, credenciamento). Desconfiança é a 3ª maior objeção (51 conversas) e 118 conversas perguntam sobre o MEC e a validade do diploma; vários leads questionam a base legal de 12 meses frente à Resolução CNE/CP 4/2024.", "como": "Fechar uma resposta oficial para cada pergunta frequente e enviar o PDF com o registro no e-MEC e a base legal logo no início da conversa; padronizar a resposta sobre o sub judice (refere-se ao credenciamento EAD, não ao semipresencial).", "meta": "Objeção de desconfiança abaixo de 30 conversas no próximo mapeamento.", "prazo": "15 dias", "grupo": "Plano de ação de vendas", "origem": "Dados das conversas e reunião de 19/08"}, {"ordem": 9, "urgente": false, "titulo": "Decidir o programa de indicação e cuidar da base", "porque": "Indicações e referências geraram 26 leads e 6 matrículas (23%), ex-alunos 11 leads e 9 matrículas (82%) e leads antigos que voltaram a conversar 13 leads e 8 matrículas (62%). Em reunião, o desconto de R$ 50 por indicação é informal e a decisão entre dinheiro e desconto está em aberto desde 19/08.", "como": "Decidir o formato do programa de indicação, comunicar ao time e criar uma rotina mensal com a lista de ex-alunos e formados para oferta.", "meta": "Dobrar o número de indicações em 60 dias.", "prazo": "30 dias", "grupo": "Plano de ação de vendas", "origem": "Reuniões de 19/08 e 02/09 e dados do CRM"}, {"ordem": 10, "urgente": false, "titulo": "Formalizar por escrito todo combinado", "porque": "De 18% a 51% das mensagens dos consultores são áudios (Alan 51%, Lindomar 45%, Michael 43%), que o CRM não lê e que não deixam registro do que foi prometido.", "como": "Sempre que houver acordo (preço, desconto, prazo, data de início), confirmar por escrito na conversa.", "meta": "Consultores que hoje passam de 40% em áudio caírem para menos de 25%.", "prazo": "15 dias", "grupo": "Plano de ação de vendas", "origem": "Dados das conversas"}, {"ordem": 11, "urgente": false, "titulo": "Alinhar a régua oficial de matrículas", "porque": "Nas reuniões de agosto e setembro falou-se em 250 a 300 matrículas por mês, com 50 a 70 por consultor. O CRM mostra hoje 85 matrículas em 20 dias (cerca de 128 por mês). A conta antiga incluía ex-alunos e indicações, e a conversão de 15% a 19% foi estimada pelos consultores, não medida.", "como": "Definir com os dados do DKX o que conta como lead, o que conta como matrícula nova e qual é a meta mensal por consultor.", "meta": "Meta mensal por consultor definida e acompanhada no painel.", "prazo": "15 dias", "grupo": "Plano de ação de vendas", "origem": "Reuniões de 19/08 e 02/09 e dados do CRM"}, {"ordem": 12, "urgente": false, "titulo": "Separar suporte de venda e registrar o valor no card", "porque": "32 dos 884 cards (4%) não eram leads: alunos pedindo suporte, ex-alunos e engano. Pelo menos 10 cards em Matriculado são rematrículas e há cards duplicados ou cancelados. O DKX mostra R$ 0 nos cards.", "como": "Caminho de suporte separado; marcar rematrícula como tipo de card; registrar o valor do curso no card.", "meta": "Conversão calculada só sobre leads reais e receita real no painel.", "prazo": "30 dias", "grupo": "Plano de ação de vendas", "origem": "Dados do CRM"}, {"ordem": 13, "urgente": true, "titulo": "Cadência de 3 toques: manter o desenho, com um propósito por toque", "origem": "Cadência de follow-up de 14/10, comparada com os dados do CRM e as reuniões", "porque": "O desenho está bom: cada toque tem um propósito (conexão, objeção e valor, decisão), as três situações correspondem aos pontos onde o lead para (depois da apresentação, depois dos valores e depois dos procedimentos de matrícula), as mensagens são curtas, cordiais e terminam com pergunta. Responde ao que o time pediu em 02/09: follow-up que vá além do “Oi, tudo bem?”.", "como": "Manter a estrutura e a ordem D+1, D+2 e D+3. Os ajustes abaixo mexem só no que faz o sistema reconhecer a mensagem e no que acompanha cada toque.", "meta": "Cadência aprovada como padrão do time.", "prazo": "7 dias", "grupo": "Revisão da cadência de follow-up (proposta do Douglas)"}, {"ordem": 14, "urgente": true, "titulo": "Fazer as frases da cadência moverem o card no DKX", "origem": "Gatilhos do DKX e dados do funil", "porque": "Hoje só 1 das 9 mensagens move o card: o 1º toque da situação 1 (“Conseguiu analisar as informações…”). Os gatilhos esperam “Estou retomando seu atendimento sobre a formação” no 2º toque e “Você ainda tem interesse em seguir com a formação?” ou “Estou finalizando os atendimentos que ficaram em aberto” no 3º. O reflexo aparece nas colunas: 131 cards em Follow-up 1, 30 em Follow-up 2 e 14 em Follow-up 3, e os gatilhos dispararam 218, 50 e 24 vezes.", "como": "Duas saídas: (a) acrescentar a frase do gatilho no começo de cada toque, mantendo o resto do texto dele; (b) cadastrar no DKX as frases novas como variações. A tabela acima mostra a frase sugerida para cada mensagem. Na situação 3 o card já está em Ficha enviada, que fica à frente do Follow-up, então não deve voltar de coluna.", "meta": "Todas as mensagens que devem mover o card movendo, e o funil de follow-up avançando de 1 para 2 e 3.", "prazo": "7 dias", "grupo": "Revisão da cadência de follow-up (proposta do Douglas)"}, {"ordem": 15, "urgente": false, "titulo": "Dar valor no 2º toque, não só perguntar", "origem": "Dados das conversas e reunião de 02/09", "porque": "No 2º toque (objeção e valor) a mensagem pergunta o que está pesando, mas não entrega nada. Em 02/09 o time pediu follow-up com prova social e material visual, e quem usa vídeo ou arte diz converter mais que texto. Em 137 de 208 conversas paradas, o consultor escreveu por último e o lead sumiu.", "como": "Acompanhar o 2º toque com um material escolhido pela objeção: depoimento de aluno, comparação do preço total, PDF do MEC ou aula experimental.", "meta": "Material enviado no 2º toque em todas as situações.", "prazo": "15 dias", "grupo": "Revisão da cadência de follow-up (proposta do Douglas)"}, {"ordem": 16, "urgente": false, "titulo": "Personalizar com o curso e a formação do lead", "origem": "Dados das conversas", "porque": "As mensagens usam só o nome. O time já coleta formação e curso de interesse no início, e 74 conversas ainda não definiram o curso. Citar o curso (“sobre a Licenciatura em Matemática”) mostra atenção e ajuda a retomar.", "como": "Incluir [Curso] nas mensagens e, para quem não escolheu, usar o 1º toque para perguntar qual área interessa.", "meta": "Mensagens com o curso do lead em 100% dos follow-ups.", "prazo": "15 dias", "grupo": "Revisão da cadência de follow-up (proposta do Douglas)"}, {"ordem": 17, "urgente": false, "titulo": "Situação 2: ancorar o valor e oferecer duas opções", "origem": "Técnica de ancoragem do time e dados das conversas", "porque": "Depois dos valores, o 1º toque pergunta se ficou dúvida sobre as condições. Retomar o valor cheio (matrícula de R$ 199) e fechar com uma pergunta de duas opções, por exemplo boleto ou cartão, leva a conversa para a decisão. Preço é a objeção nº 1, com 66 conversas.", "como": "Reescrever o 1º e o 2º toque da situação 2 com a âncora e a pergunta de duas opções.", "meta": "Mais respostas ao 1º toque da situação 2.", "prazo": "15 dias", "grupo": "Revisão da cadência de follow-up (proposta do Douglas)"}, {"ordem": 18, "urgente": false, "titulo": "Situação 3: lembrar a próxima turma e o que falta", "origem": "Dados das conversas", "porque": "Quem recebeu os procedimentos e não concluiu pode estar esperando uma data. Dúvidas sobre início da turma e vencimento aparecem em 76 conversas. Citar a data da próxima turma e o que falta (documento ou pagamento) cria um prazo real.", "como": "Incluir a data da turma e uma lista curta do que falta em cada toque da situação 3.", "meta": "Mais fichas preenchidas depois do follow-up.", "prazo": "15 dias", "grupo": "Revisão da cadência de follow-up (proposta do Douglas)"}, {"ordem": 19, "urgente": false, "titulo": "Definir o destino depois do 3º toque e como contar os dias", "origem": "Reuniões de 02/09 e 25/09 e dados das conversas", "porque": "A cadência termina no 3º toque sem dizer o que acontece depois. Só 31% das conversas paradas tiveram 3 toques ou mais. No plantão de 17/10, 3 de 60 leads disseram que pretendem para o ano seguinte. Hoje o prazo conta da “última interação relevante”, o que deixa dúvida quando o lead some depois de um áudio.", "como": "Sem resposta no 3º toque, o card vai para Perdido com o motivo e depois para o Resgate; quem pede o ano seguinte recebe uma etiqueta com a data de retorno. Contar os dias a partir da última mensagem do consultor sem resposta, e o áudio conta.", "meta": "Nenhum card parado em Follow-up por mais de 7 dias.", "prazo": "15 dias", "grupo": "Revisão da cadência de follow-up (proposta do Douglas)"}, {"ordem": 20, "urgente": false, "titulo": "Depoimentos e provas sociais para o follow-up", "origem": "Reunião de 02/09 (pedido dos consultores) e dados do CRM", "porque": "Na reunião de 02/09 os consultores pediram artes e vídeos curtos de alunos para usar no follow-up, porque “Oi, tudo bem?” não é follow-up. Hoje, em 137 de 208 conversas paradas, o consultor escreveu por último e o lead sumiu. Quem usa material visual diz que converte mais que texto ou áudio.", "como": "Reunir 5 a 8 depoimentos curtos em vídeo e algumas artes de quebra de objeção (preço total, MEC, presencial), com link privado para enviar no 2º toque da cadência. Os consultores indicam quais alunos aceitariam gravar.", "meta": "Material disponível para o time e usado no 2º toque de follow-up.", "prazo": "15 dias", "grupo": "Ideias para apoiar as vendas"}, {"ordem": 21, "urgente": false, "titulo": "Vídeo comercial do ambiente virtual e vídeo de boas-vindas ao aluno", "origem": "Reunião de 02/09", "porque": "A pergunta “como é a plataforma?” é frequente (48 conversas citam plataforma e provas) e o vídeo atual é antigo. Em 02/09 ficaram combinados dois vídeos curtos e legendados: um comercial, de cerca de 30 segundos, e um de onboarding para o novo aluno.", "como": "Gravar o vídeo comercial primeiro, mostrando a navegação simples; o de onboarding depois, atualizado com as mudanças recentes. Enviar por link privado.", "meta": "Vídeo comercial pronto e enviado pelo time na apresentação do curso.", "prazo": "30 dias", "grupo": "Ideias para apoiar as vendas"}, {"ordem": 22, "urgente": false, "titulo": "Aula experimental de 10 a 15 minutos", "origem": "Reunião de 02/09", "porque": "Para o lead que hesita depois de ver o valor, uma aula curta funciona como prova de qualidade. A sugestão de 02/09 foi tema de alta procura, como concurso público e progressão de carreira, por link privado (YouTube não listado ou Vimeo), sem arquivo para baixar.", "como": "Escolher o tema, gravar uma aula e liberar o link só para leads em negociação. O consultor envia no 2º ou 3º toque do follow-up.", "meta": "Uma aula experimental disponível e usada em leads que pararam depois do valor.", "prazo": "30 dias", "grupo": "Ideias para apoiar as vendas"}, {"ordem": 23, "urgente": false, "titulo": "Material pronto: preço total comparado e PDF do MEC", "origem": "Dados do CRM e reunião de 19/08", "porque": "Preço é a objeção nº 1 (66 conversas) e desconfiança sobre o MEC é a 3ª (51). Na reunião de 19/08 os consultores relataram que concorrentes têm preço de segunda graduação muito baixo e marketing de vídeo. Uma imagem com o total comparado e um PDF curto com o registro no e-MEC e a base legal ajudam todos a responder do mesmo jeito.", "como": "Criar a imagem (24 de R$ 199 = R$ 4.776 em 2 anos contra 12 de R$ 249 + R$ 99 = R$ 3.087 em 1 ano) e o PDF; colocar no grupo dos consultores e usar logo no início da conversa.", "meta": "Material usado em 100% das propostas.", "prazo": "15 dias", "grupo": "Ideias para apoiar as vendas"}, {"ordem": 24, "urgente": false, "titulo": "Ideia: polos ou parcerias em outros estados", "origem": "Dados do CRM", "porque": "A parte presencial é regra do MEC e, mesmo assim, 124 conversas têm dúvida sobre presencial ou polo, 35 desistem por não conseguir ir e 24 pedem 100% online. Quem informou onde mora está em SP (21), RJ (18), DF (12) e PR (10).", "como": "Comparar esses estados com os locais onde já há polo e levar à diretoria a ideia de polo ou parceria onde há mais procura sem cobertura. Enquanto isso, ter uma resposta pronta para o presencial.", "meta": "Decisão sobre onde priorizar polo ou parceria.", "prazo": "30 dias", "grupo": "Ideias para apoiar as vendas"}, {"ordem": 25, "urgente": false, "titulo": "Campanha sazonal e novos cursos com condição e material antes do lançamento", "origem": "Reuniões de 19/08 e 25/09", "porque": "Nas reuniões surgiram a Black Friday, o bacharelado em Educação Física (com estágio de 300 horas em área do bacharel, fora da escola) e os cursos da área da saúde, que exigem um atendimento especializado. Hoje 26 conversas pedem Educação Física (licenciatura).", "como": "Definir com antecedência a condição especial, o roteiro e as respostas sobre estágio de cada curso novo e treinar o time antes de a procura chegar.", "meta": "Roteiro e material de cada lançamento prontos antes da campanha.", "prazo": "30 dias", "grupo": "Ideias para apoiar as vendas"}, {"ordem": 26, "urgente": false, "titulo": "Oportunidades de curso que os leads pedem", "origem": "Dados do CRM", "porque": "Leads pediram o que a R2 ainda não tem: primeira graduação, para quem não tem nenhuma (11 pedidos), licenciatura em Administração, Contábeis ou Gestão (7) e pós-graduação (7). Psicologia e curso livre apareceram uma vez cada.", "como": "Registrar os pedidos com o motivo “Não temos o curso de interesse” e levar a lista à diretoria a cada mês.", "meta": "Lista mensal de pedidos fora do portfólio.", "prazo": "30 dias", "grupo": "Ideias para apoiar as vendas"}, {"ordem": 27, "urgente": false, "titulo": "Responder rápido nos comentários e redes com um roteiro curto", "origem": "Sugestão do dia a dia da equipe", "porque": "Há interesse em responder rapidamente os comentários das redes, que são um canal de leads. A sugestão é separar os que têm interesse real (dúvida sobre curso, formação) dos comentários sem interesse, que recebem um agradecimento curto.", "como": "Filtrar os comentários sem resposta duas vezes por dia, responder o que tem interesse com o link rastreado de cada canal e usar uma resposta padrão para os demais.", "meta": "Nenhum comentário com interesse sem resposta por mais de 24 horas.", "prazo": "7 dias", "grupo": "Ideias para apoiar as vendas"}, {"ordem": 28, "urgente": false, "titulo": "Perguntar “como nos conheceu” e registrar no card", "origem": "Dados do CRM", "porque": "A origem do card nem sempre mostra de onde o lead veio: 48 cards apareciam como “WhatsApp”, e 22 ainda estão sem origem identificada. Saber a origem real ajuda a escolher o que mais traz alunos.", "como": "Incluir a pergunta no roteiro de abertura e registrar a resposta no card.", "meta": "Origem real preenchida em 90% dos cards novos.", "prazo": "15 dias", "grupo": "Ideias para apoiar as vendas"}], "site_6meses": [], "site_6meses_lista": [], "investimento_resumo": [], "sensibilidade_cac": [], "trafego_canais": [], "conteudo_resumo": [], "plano_marketing": [], "campanhas_ads": [], "ltv_cenarios": []};
+(function(){
+  var D = window.__DATA, cbs = [];
+  window.dash = {
+    data: function(id){ return {status:'ok', data: D[id] || []}; },
+    onData: function(fn){ cbs.push(fn); },
+    calc: function(id, o){ D[id] = o.fn.apply(null, o.inputs.map(function(i){ return D[i] || []; })); },
+    setLink: function(id){ try { history.replaceState(null, '', '#' + id); } catch(e) {} }
+  };
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(function(){ cbs.forEach(function(f){ f(); }); }, 0); });
+})();
+</script>
+</head>
+<body>
+<style>
+/* Layout: faixa azul R2 no topo, abas fixas, uma pergunta por aba (título + frase-conclusão em amarelo + gráfico). Tema sempre claro: azul e branco, amarelo só para destaque. Pensado para TDAH/autismo: previsível, muito respiro, uma ideia por vez. */
+#dash-root{--dash-gutter:0}
+.r2{--r2-azul:#123f8b;--r2-azul-forte:#0c2c66;--r2-azul-2:#2b5fc0;--r2-azul-3:#c3d5f3;--r2-azul-claro:#eef4fd;--r2-amarelo:#ffcc00;--r2-amarelo-claro:#fff7d1;--r2-fundo:#ffffff;--r2-pagina:#f5f8fd;--r2-texto:#0d1f3f;--r2-suave:#3b5079;--r2-linha:#d6e1f3;
+  color-scheme:light;background:var(--r2-pagina);color:var(--r2-texto);font-family:var(--font-anthropic-sans);font-size:16px;line-height:1.5;min-height:100%;border-radius:14px;overflow:hidden}
+.r2-in{max-width:1160px;margin-inline:auto;padding-inline:clamp(16px,3.5vw,40px)}
+.r2-topo{background:var(--r2-azul);border-bottom:6px solid var(--r2-amarelo);color:#fff}
+.r2-topo .r2-in{display:flex;flex-direction:column;gap:6px;padding-block:28px 24px}
+.r2-topo .marca{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--r2-amarelo);font-weight:600}
+.r2-topo h1{font-family:var(--font-anthropic-serif);font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.1;margin:0;color:#fff;text-wrap:balance}
+.r2-topo p{margin:0;color:#dbe6fb;font-size:1rem;max-width:62ch}
+.r2-abas{position:sticky;top:0;z-index:5;background:var(--r2-fundo);border-bottom:1px solid var(--r2-linha);box-shadow:0 2px 8px rgba(18,63,139,.06)}
+.r2-abas .r2-in{display:flex;flex-wrap:wrap;gap:8px;padding-block:12px}
+.r2-aba{font:inherit;font-size:.95rem;font-weight:500;border:1.5px solid var(--r2-linha);background:var(--r2-fundo);color:var(--r2-azul);border-radius:999px;padding:8px 14px 8px 8px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:border-color .15s}
+.r2-aba:hover{border-color:var(--r2-azul-2)}
+.r2-aba .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--r2-azul-claro);color:var(--r2-azul);font-size:.8rem;font-weight:700;font-variant-numeric:tabular-nums}
+.r2-aba[aria-selected="true"]{background:var(--r2-azul);border-color:var(--r2-azul);color:#fff}
+.r2-aba[aria-selected="true"] .n{background:var(--r2-amarelo);color:var(--r2-azul-forte)}
+.r2-aba:focus-visible{outline:3px solid var(--r2-amarelo);outline-offset:2px}
+.r2-main{padding-block:28px 36px;display:flex;flex-direction:column;gap:24px}
+.r2-pagina{display:flex;flex-direction:column;gap:20px}
+.r2-pagina h2{font-family:var(--font-anthropic-serif);font-weight:400;font-size:clamp(1.5rem,2.8vw,1.9rem);line-height:1.2;margin:0;color:var(--r2-azul);text-wrap:balance}
+.r2-sub{margin:-10px 0 0;color:var(--r2-suave);font-size:1rem}
+.r2-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:14px}
+.r2-grade-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,26rem),1fr));gap:16px}
+.r2-num{background:var(--r2-fundo);border:1px solid var(--r2-linha);border-top:5px solid var(--r2-azul-2);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.r2-num .rot{font-size:.95rem;color:var(--r2-suave);font-weight:500}
+.r2-num .val{font-family:var(--font-anthropic-serif);font-size:2.6rem;line-height:1.1;color:var(--r2-azul);font-variant-numeric:tabular-nums}
+.r2-num .exp{font-size:.88rem;color:var(--r2-suave)}
+.r2-num.destaque{background:var(--r2-azul);border-color:var(--r2-azul);border-top-color:var(--r2-amarelo)}
+.r2-num.destaque .rot,.r2-num.destaque .exp{color:#dbe6fb}
+.r2-num.destaque .val{color:var(--r2-amarelo)}
+.r2-card{background:var(--r2-fundo);border:1px solid var(--r2-linha);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0;box-shadow:0 1px 2px rgba(18,63,139,.05)}
+.r2-card h3{margin:0;font-size:1.1rem;color:var(--r2-azul);font-weight:600}
+.r2-card .nota{margin:0;color:var(--r2-suave);font-size:.92rem}
+.r2-ideia{background:var(--r2-amarelo-claro);border:1px solid #f3e09a;border-left:6px solid var(--r2-amarelo);border-radius:10px;padding:14px 16px;font-size:1.02rem;line-height:1.55;color:var(--r2-texto)}
+.r2-chart{width:100%;min-height:120px;position:relative}
+.r2-chart svg{display:block}
+.r2-chart text{fill:var(--r2-texto);font-size:13px;font-family:var(--font-anthropic-sans)}
+.r2-chart .eixo text{fill:var(--r2-suave);font-size:12px}
+.r2-chart .eixo line,.r2-chart .eixo path{stroke:var(--r2-linha)}
+.r2-tip{position:absolute;pointer-events:none;background:var(--r2-fundo);color:var(--r2-texto);border:1px solid var(--r2-azul-3);border-radius:8px;box-shadow:0 4px 14px rgba(18,63,139,.15);padding:6px 10px;font-size:.85rem;white-space:nowrap}
+.r2-tabela{width:100%;border-collapse:collapse;font-size:.97rem;font-variant-numeric:tabular-nums;color:var(--r2-texto)}
+.r2-tabela th{text-align:left;color:var(--r2-suave);font-weight:600;background:var(--r2-azul-claro);border-bottom:2px solid var(--r2-azul-3);padding:10px 8px}
+.r2-tabela td{border-bottom:1px solid var(--r2-linha);padding:10px 8px;vertical-align:top}
+.r2-tabela tbody tr:nth-child(even) td{background:#fafcff}
+.r2-tabela td.num,.r2-tabela th.num{text-align:right}
+.r2-rolagem{overflow-x:auto}
+.r2-lista{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.r2-lista li{display:grid;grid-template-columns:2.6rem 1fr;gap:12px;align-items:start}
+.r2-lista .qtd{font-family:var(--font-anthropic-serif);font-size:1.5rem;line-height:1.2;color:var(--r2-azul);text-align:right;font-variant-numeric:tabular-nums}
+.r2-lista .txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+.r2-lista .tit{font-weight:600;color:var(--r2-texto)}
+.r2-lista .cit{color:var(--r2-suave);font-size:.92rem;font-style:italic}
+.r2-barra{height:8px;border-radius:4px;background:var(--r2-azul-claro);overflow:hidden;margin-top:4px}
+.r2-barra i{display:block;height:100%;background:var(--r2-azul-2);border-radius:4px}
+.r2-acao{display:grid;grid-template-columns:2.4rem 1fr;gap:14px;align-items:start;padding:14px 0;border-bottom:1px solid var(--r2-linha)}
+.r2-acao:last-child{border-bottom:0}
+.r2-acao .ic{width:2.4rem;height:2.4rem;border-radius:50%;display:grid;place-items:center;background:var(--r2-azul);color:#fff;font-weight:700}
+.r2-acao.urg .ic{background:var(--r2-amarelo);color:var(--r2-azul-forte)}
+.r2-acao h4{margin:0 0 4px;font-size:1.05rem;color:var(--r2-texto)}
+.r2-acao p{margin:0;color:var(--r2-suave);line-height:1.55}
+.r2-rodape{color:var(--r2-suave);font-size:.88rem;line-height:1.55;border-top:1px solid var(--r2-linha);padding-top:14px;margin:0}
+[data-dash-source-state=empty]{color:transparent}
+[data-dash-source-state=refreshing]{opacity:.5}
+.r2-def{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.r2-def li{background:var(--r2-azul-claro);border-left:5px solid var(--r2-azul-2);border-radius:8px;padding:10px 14px;color:var(--r2-texto)}
+.r2-def b{color:var(--r2-azul)}
+.r2-conta{font-variant-numeric:tabular-nums;background:var(--r2-fundo);border:1px solid var(--r2-linha);border-radius:10px;padding:12px 14px;line-height:1.7}
+.r2-conta .res{font-weight:700;color:var(--r2-azul)}
+.r2-link{color:var(--r2-azul-2);text-decoration:underline;overflow-wrap:anywhere}
+.r2-tip.multi{white-space:normal;min-width:190px;max-width:320px;line-height:1.45;z-index:6}
+.r2-tip.multi b{color:var(--r2-azul)}
+.r2-tip.multi div+div{font-variant-numeric:tabular-nums}
+.r2-acao p+p{margin-top:6px}
+.r2-acao p b{color:var(--r2-azul)}
+.r2-hit{cursor:pointer}
+.r2-grupo{margin:22px 0 2px;font-size:1.2rem;color:var(--r2-azul);font-family:var(--font-anthropic-serif);font-weight:600}
+.r2-grupo:first-child{margin-top:0}
+.r2-origem{font-size:.86rem;color:var(--r2-suave);font-style:italic}
+@media (max-width:520px){.r2-num .val{font-size:2.1rem}.r2-aba{padding:7px 11px 7px 7px;font-size:.88rem}}
+</style>
+
+
+<div class="r2" id="r2">
+  <header class="r2-topo"><div class="r2-in">
+    <span class="marca">R2 Formação Pedagógica</span>
+    <h1>Raio-X Comercial R2</h1>
+    <p id="periodo" data-source="totais">—</p>
+  </div></header>
+
+  <nav class="r2-abas" aria-label="Seções do painel"><div class="r2-in" role="tablist">
+    <button class="r2-aba" role="tab" data-aba="resumo" aria-selected="true"><span class="n">1</span>Resumo</button>
+    <button class="r2-aba" role="tab" data-aba="consultores"><span class="n">2</span>Consultores</button>
+    <button class="r2-aba" role="tab" data-aba="origens"><span class="n">3</span>Origem e horários</button>
+    <button class="r2-aba" role="tab" data-aba="matriculas"><span class="n">4</span>Fichas e matrículas</button>
+    <button class="r2-aba" role="tab" data-aba="cursos"><span class="n">5</span>Cursos e oportunidades</button>
+    <button class="r2-aba" role="tab" data-aba="objecoes"><span class="n">6</span>Objeções</button>
+    <button class="r2-aba" role="tab" data-aba="pessoas"><span class="n">7</span>Dores, dúvidas e desejos</button>
+    <button class="r2-aba" role="tab" data-aba="vendas"><span class="n">8</span>Plano de ação</button>
+  </div></nav>
+  <main class="r2-in r2-main">
+
+  <!-- 1 RESUMO -->
+  <section class="r2-pagina" id="resumo" data-pagina="resumo">
+    <h2>Em 1 minuto</h2>
+    <p class="r2-sub">Os quatro números que contam a história.</p>
+    <div class="r2-grade">
+      <div class="r2-num"><span class="rot">Leads que entraram</span><span class="val" data-source="totais" data-field="leads_total">—</span><span class="exp">no Funil Comercial</span></div>
+      <div class="r2-num"><span class="rot">Fichas preenchidas</span><span class="val" data-source="totais" data-field="fichas_total">—</span><span class="exp">chegaram na Secretaria</span></div>
+      <div class="r2-num destaque"><span class="rot">Matrículas efetivadas</span><span class="val" data-source="totais" data-field="efetivadas">—</span><span class="exp">Secretaria confirmou</span></div>
+      <div class="r2-num"><span class="rot">De cada 100 leads, viram aluno</span><span class="val" data-source="taxa" data-field="conversao">—</span><span class="exp">conversão lead → matrícula</span></div>
+    </div>
+    <div class="r2-ideia" id="ideia-resumo" data-source="totais">—</div>
+    <div class="r2-card" id="card-funil">
+      <h3>Onde os leads estão agora</h3>
+      <p class="nota">Cada barra é uma coluna do Funil Comercial. Amarelo: o maior gargalo. Passe o mouse ou toque em uma barra para ver quantos cards cada consultor tem naquela coluna.</p><span hidden data-source="funil_consultor"></span>
+      <div class="r2-chart" id="ch-funil" data-source="funil"></div>
+    </div>
+  </section>
+
+  <!-- 2 CONSULTORES -->
+  <section class="r2-pagina" id="consultores" data-pagina="consultores" hidden>
+    <h2>Leads e resultado por consultor</h2>
+    <p class="r2-sub">Quantos leads cada um recebeu e quantos viraram matrícula.</p>
+    <div class="r2-ideia" id="ideia-cons" data-source="consultores">—</div>
+    <div class="r2-grade-2">
+      <div class="r2-card" id="card-cons-leads">
+        <h3>Leads recebidos</h3>
+        <p class="nota">Desde 30/09. A roleta tenta dividir igual. Passe o mouse ou toque para ver em que coluna estão os cards de cada um.</p><span hidden data-source="funil_consultor"></span>
+        <div class="r2-chart" id="ch-cons-leads" data-source="consultores"></div>
+      </div>
+      <div class="r2-card" id="card-cons-mat">
+        <h3>Matrículas (card em Matriculado)</h3>
+        <p class="nota">Amarelo: quem mais converteu.</p>
+        <div class="r2-chart" id="ch-cons-mat" data-source="consultores"></div>
+      </div>
+    </div>
+    <div class="r2-card" id="card-cons-tab">
+      <h3>Tabela completa</h3>
+      <p class="nota">Conversão = matrículas ÷ leads recebidos.</p>
+      <div class="r2-rolagem">
+        <table class="r2-tabela" data-source="consultores" data-row-key="consultor">
+          <thead><tr>
+            <th data-field="consultor">Consultor</th>
+            <th class="num" data-field="leads">Leads</th>
+            <th class="num" data-field="em_aberto">Em aberto</th>
+            <th class="num" data-field="matriculados">Matrículas</th>
+            <th class="num" data-field="perdidos">Perdidos</th>
+            <th class="num" data-field="conversao_pct">Conversão %</th>
+          </tr></thead>
+          <tbody id="tb-cons"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="r2-card" id="card-parados">
+      <h3>Leads parados por consultor</h3>
+      <p class="nota">Cards ainda abertos. “Sem conversa” = o card não tem nenhuma conversa registrada no DKX. A regra combinada em setembro é de até 15 dias com cada consultor.</p>
+      <div class="r2-rolagem">
+        <table class="r2-tabela" data-source="leads_parados" data-row-key="consultor">
+          <thead><tr>
+            <th data-field="consultor">Consultor</th>
+            <th class="num" data-field="abertos">Abertos</th>
+            <th class="num" data-field="novo_lead">Em Novo Lead</th>
+            <th class="num" data-field="sem_conversa">Sem conversa</th>
+            <th class="num" data-field="entre_8_e_14_dias">Há 8 a 14 dias</th>
+            <th class="num" data-field="mais_de_15_dias">Há mais de 15 dias</th>
+          </tr></thead>
+          <tbody id="tb-parados"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <h2 style="margin-top:12px">Quanto tempo cada consultor leva para responder</h2>
+    <p class="r2-sub">Calculado nos horários de cada mensagem das conversas. Inclui noite e fim de semana.</p>
+    <div class="r2-ideia" id="ideia-tempo" data-source="tempos_resposta">—</div>
+    <div class="r2-grade-2">
+      <div class="r2-card" id="card-t1">
+        <h3>1. Primeira resposta ao lead</h3>
+        <p class="nota">Da primeira mensagem do lead até a primeira mensagem de um consultor de verdade (a boas-vindas automática não conta). Mediana, em minutos. Amarelo: o mais rápido.</p>
+        <div class="r2-chart" id="ch-t1" data-source="tempos_resposta"></div>
+      </div>
+      <div class="r2-card" id="card-t3">
+        <h3>3. Tempo até fechar (enviar a ficha)</h3>
+        <p class="nota">Da primeira mensagem do lead até o consultor enviar a ficha de matrícula. Mediana, em horas. Amarelo: o mais rápido.</p>
+        <div class="r2-chart" id="ch-t3" data-source="tempos_resposta"></div>
+      </div>
+    </div>
+    <div class="r2-card" id="card-ttab">
+      <h3>Os três tempos lado a lado</h3>
+      <p class="nota">2. Nova mensagem: quando o lead escreve de novo no meio da conversa, quanto o consultor leva para responder (mediana). Mediana = o valor do meio; um caso extremo não distorce o número.</p>
+      <div class="r2-rolagem">
+        <table class="r2-tabela" data-source="tempos_resposta" data-row-key="consultor">
+          <thead><tr>
+            <th data-field="consultor">Consultor</th>
+            <th class="num" data-field="primeira_resposta_min">1ª resposta</th>
+            <th class="num" data-field="pct_ate_5min">Em até 5 min</th>
+            <th class="num" data-field="pct_ate_1h">Em até 1 h</th>
+            <th class="num" data-field="pct_sem_resposta_humana">Sem resposta</th>
+            <th class="num" data-field="retorno_min">2. Nova mensagem</th>
+            <th class="num" data-field="ate_ficha_horas">3. Até a ficha</th>
+            <th class="num" data-field="fichas_com_horario">Fichas medidas</th>
+          </tr></thead>
+          <tbody id="tb-tempo"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="r2-card" id="card-andre">
+      <h3>Como o André atende, comparado ao time</h3>
+      <p class="nota">Conversas em que o lead escreveu algo. Mensagens = enviadas pelo consultor, sem a boas-vindas automática.</p>
+      <div class="r2-rolagem">
+        <table class="r2-tabela" data-source="comportamento" data-row-key="consultor">
+          <thead><tr>
+            <th data-field="consultor">Consultor</th>
+            <th class="num" data-field="conversas">Conversas</th>
+            <th class="num" data-field="msgs_consultor_por_conversa">Mensagens por conversa</th>
+            <th class="num" data-field="pct_audio">% em áudio</th>
+            <th class="num" data-field="pct_chegou_na_ficha">% que chegou na ficha</th>
+          </tr></thead>
+          <tbody id="tb-comp"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 ORIGENS -->
+  <section class="r2-pagina" id="origens" data-pagina="origens" hidden>
+    <h2>De onde vêm os leads e quando chegam</h2>
+    <p class="r2-sub">Para saber onde investir e em que horário ter gente atendendo.</p>
+    <div class="r2-ideia" id="ideia-orig" data-source="origens">—</div>
+    <div class="r2-grade-2">
+      <div class="r2-card" id="card-orig-leads">
+        <h3>Leads por origem</h3>
+        <p class="nota">Quantidade de leads de cada canal.</p>
+        <div class="r2-chart" id="ch-orig-leads" data-source="origens"></div>
+      </div>
+      <div class="r2-card" id="card-orig-conv">
+        <h3>Conversão por origem</h3>
+        <p class="nota">% dos leads do canal que já viraram matrícula. Só canais com 10 leads ou mais.</p>
+        <div class="r2-chart" id="ch-orig-conv" data-source="origens"></div>
+      </div>
+    </div>
+    <div class="r2-card" id="card-orig-tab">
+      <h3>Do lead à matrícula, por origem</h3>
+      <p class="nota">Cards sem os de teste. Conversaram = o lead escreveu algo além da saudação. Ficha = recebeu a ficha, preencheu ou já é aluno.</p>
+      <div class="r2-rolagem">
+        <table class="r2-tabela" data-source="origens" data-row-key="origem">
+          <thead><tr>
+            <th data-field="origem">Origem</th>
+            <th class="num" data-field="leads">Leads</th>
+            <th class="num" data-field="conversaram">Conversaram</th>
+            <th class="num" data-field="fichas">Chegaram na ficha</th>
+            <th class="num" data-field="matriculados">Matrículas</th>
+            <th class="num" data-field="conversao_pct">Conversão %</th>
+          </tr></thead>
+          <tbody id="tb-orig"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="r2-card" id="card-wa">
+      <h3>E a origem “WhatsApp”?</h3>
+      <div class="r2-ideia">A R2 não tem campanha de WhatsApp, então essa origem não é um canal. Ela aparecia quando o lead falava direto com o número do consultor. Ao ler as 48 conversas, 10 eram ex-alunos pedindo rematrícula, 13 eram leads antigos que voltaram a conversar, 4 eram indicações e 21 não têm origem identificada. Por isso a origem “WhatsApp” saiu do painel: cada grupo foi para a sua linha (os 21 sem origem ficaram em “Orgânico (outros, origem não identificada)”). Para saber de onde esses contatos vêm, o consultor precisa perguntar “como nos conheceu”.</div>
+    </div>
+    <div class="r2-card" id="card-dia">
+      <h3>Leads por dia</h3>
+      <p class="nota">30/09 a 18/10 (dias completos). Amarelo: sábados e domingos.</p>
+      <div class="r2-chart" id="ch-dia" data-source="leads_por_dia"></div>
+    </div>
+    <div class="r2-grade-2">
+      <div class="r2-card" id="card-semana">
+        <h3>Dia da semana</h3>
+        <p class="nota">Soma de 30/09 a 18/10.</p>
+        <div class="r2-chart" id="ch-semana" data-source="leads_por_dia_semana"></div>
+      </div>
+      <div class="r2-card" id="card-hora">
+        <h3>Horário de chegada</h3>
+        <p class="nota">Horário de Brasília. Amarelo: depois das 18h.</p>
+        <div class="r2-chart" id="ch-hora" data-source="leads_por_hora"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 MATRICULAS -->
+  <section class="r2-pagina" id="matriculas" data-pagina="matriculas" hidden>
+    <h2>Fichas preenchidas e matrículas efetivadas</h2>
+    <p class="r2-sub">Funil da Secretaria: da ficha preenchida até a matrícula confirmada.</p>
+    <div class="r2-grade">
+      <div class="r2-num"><span class="rot">Fichas preenchidas</span><span class="val" data-source="totais" data-field="fichas_total">—</span><span class="exp">entraram na Secretaria</span></div>
+      <div class="r2-num destaque"><span class="rot">Matrícula efetivada</span><span class="val" data-source="totais" data-field="efetivadas">—</span><span class="exp">confirmadas</span></div>
+      <div class="r2-num"><span class="rot">Aguardando a Secretaria</span><span class="val" data-source="totais" data-field="aguardando_secretaria">—</span><span class="exp">em "Fichas de matrícula"</span></div>
+      <div class="r2-num"><span class="rot">Fichas que viraram matrícula</span><span class="val" data-source="taxa" data-field="efetivacao">—</span><span class="exp">efetivadas ÷ fichas</span></div>
+    </div>
+    <div class="r2-ideia" id="ideia-mat" data-source="totais">—</div>
+    <div class="r2-card" id="card-mat-cons">
+      <h3>Por consultor: fichas e efetivadas</h3>
+      <p class="nota">Azul claro: fichas. Azul forte: efetivadas.</p>
+      <div class="r2-chart" id="ch-mat-cons" data-source="consultores"></div>
+    </div>
+    <div class="r2-card" id="card-resgate">
+      <h3>Resgate (perdidos que podem voltar)</h3>
+      <div class="r2-ideia" id="ideia-resgate" data-source="totais">—</div>
+    </div>
+  </section>
+
+  <!-- 5 CURSOS -->
+  <section class="r2-pagina" id="cursos" data-pagina="cursos" hidden>
+    <h2>Cursos mais procurados, mais fechados e oportunidades</h2>
+    <p class="r2-sub" id="amostra-cursos" data-source="amostra">—</p>
+    <div class="r2-ideia" id="ideia-cursos" data-source="cursos">—</div>
+    <div class="r2-card" id="card-cursos">
+      <h3>Procurados × fechados</h3>
+      <p class="nota">Azul claro: quantos pediram. Azul forte: quantos fecharam (ficha ou matrícula).</p>
+      <div class="r2-chart" id="ch-cursos" data-source="cursos"></div>
+    </div>
+    <div class="r2-grade-2">
+      <div class="r2-card" id="card-faltantes">
+        <h3>Pediram e a R2 não tem</h3>
+        <p class="nota">Oportunidades de produto: o que o lead pediu fora do portfólio, inclusive se perguntaram por pós-graduação e curso livre.</p>
+        <ul class="r2-lista" id="ls-faltantes" data-source="cursos_faltantes"></ul>
+      </div>
+      <div class="r2-card" id="card-perfil">
+        <h3>Graduação de quem procura</h3>
+        <p class="nota">A formação que o lead já tem.</p>
+        <ul class="r2-lista" id="ls-perfil" data-source="perfil_origem"></ul>
+      </div>
+    </div>
+    <div class="r2-card" id="card-estados">
+      <h3>Onde moram os leads que disseram o estado</h3>
+      <p class="nota">Serve para decidir onde abrir polo ou parceria. Só entram os leads que contaram onde moram.</p>
+      <div class="r2-chart" id="ch-estados" data-source="estados"></div>
+    </div>
+  </section>
+
+  <!-- 6 OBJECOES -->
+  <section class="r2-pagina" id="objecoes" data-pagina="objecoes" hidden>
+    <h2>O que trava a matrícula</h2>
+    <p class="r2-sub">Objeções que os leads escreveram nas conversas.</p>
+    <div class="r2-ideia" id="ideia-obj" data-source="objecoes">—</div>
+    <div class="r2-grade-2">
+      <div class="r2-card" id="card-obj">
+        <h3>Maiores objeções</h3>
+        <p class="nota">Número = conversas em que apareceu.</p>
+        <ul class="r2-lista" id="ls-obj" data-source="objecoes"></ul>
+      </div>
+      <div class="r2-card" id="card-parou">
+        <h3>Onde a conversa parou</h3>
+        <p class="nota">Nos leads perdidos e em follow-up.</p>
+        <div class="r2-chart" id="ch-parou" data-source="onde_parou"></div>
+      </div>
+    </div>
+    <div class="r2-card" id="card-toques">
+      <h3>Quantas vezes o consultor tentou depois que o lead parou de responder</h3>
+      <p class="nota">Conversas em follow-up ou perdidas em que o lead escreveu algo e depois sumiu. A cadência combinada é de três toques (D+1, D+2 e D+3).</p>
+      <div class="r2-chart" id="ch-toques" data-source="followup_toques"></div>
+    </div>
+    <div class="r2-card" id="card-online">
+      <h3>“Quero 100% online” e “não consigo ir ao polo”</h3>
+      <div class="r2-ideia" id="ideia-online" data-source="objecoes">—</div>
+    </div>
+    <div class="r2-card" id="card-motivos">
+      <h3>Motivos de perda marcados no CRM</h3>
+      <p class="nota">O que os consultores escolheram ao marcar Perdido (posição de 16/10, sem os cards de teste).</p>
+      <div class="r2-chart" id="ch-motivos" data-source="motivos_perda"></div>
+    </div>
+  </section>
+
+  <!-- 7 PESSOAS -->
+  <section class="r2-pagina" id="pessoas" data-pagina="pessoas" hidden>
+    <h2>Quem é o lead: dores, dúvidas e desejos</h2>
+    <p class="r2-sub">Material para conteúdo, anúncio e script de atendimento.</p>
+    <div class="r2-grade-2">
+      <div class="r2-card" id="card-dores"><h3>Maiores dores</h3><p class="nota">O problema que ele quer resolver.</p><ul class="r2-lista" id="ls-dores" data-source="dores"></ul></div>
+      <div class="r2-card" id="card-duvidas"><h3>Maiores dúvidas</h3><p class="nota">O que ele pergunta antes de decidir.</p><ul class="r2-lista" id="ls-duvidas" data-source="duvidas"></ul></div>
+    </div>
+    <div class="r2-card" id="card-desejos"><h3>Maiores desejos</h3><p class="nota">Onde ele quer chegar.</p><ul class="r2-lista" id="ls-desejos" data-source="desejos"></ul></div>
+  </section>
+
+  <!-- 10 PLANO DE VENDAS -->
+  <section class="r2-pagina" id="vendas" data-pagina="vendas" hidden>
+    <h2>Plano de ação sugerido, para aprovação</h2>
+    <p class="r2-sub">Propostas baseadas nos dados do CRM, nas conversas e nas reuniões de agosto e setembro, incluindo a revisão da cadência de follow-up. Marque Aprovar, Ajustar ou Adiar em cada uma. Amarelo: começar já.</p>
+    <div class="r2-card" id="card-cad">
+      <h3>Cadência de follow-up: cada mensagem e o que acontece no DKX</h3>
+      <p class="nota">As nove mensagens da cadência de 14/10, comparadas com as frases que hoje movem o card. O sistema só reconhece o trecho exato e só avança o card.</p>
+      <div class="r2-chart" id="ch-fu" data-source="funil"></div>
+      <div class="r2-rolagem">
+        <table class="r2-tabela" data-source="cadencia_tabela" data-row-key="ordem">
+          <thead><tr>
+            <th data-field="situacao">Situação</th>
+            <th data-field="toque">Toque</th>
+            <th data-field="texto">Mensagem</th>
+            <th data-field="move">Move o card?</th>
+            <th data-field="sugestao">Sugestão</th>
+          </tr></thead>
+          <tbody id="tb-cad"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="r2-card"><div id="ls-vendas" data-source="plano_vendas"></div></div>
+  </section>
+
+  <p class="r2-rodape" id="rodape" data-source="amostra">—</p>
+  </main>
+</div>
+
+<script>
+(function(){
+  const abas=[...document.querySelectorAll('.r2-aba')];
+  const mostrar=(id)=>{
+    abas.forEach(b=>b.setAttribute('aria-selected', String(b.dataset.aba===id)));
+    document.querySelectorAll('.r2-pagina').forEach(p=>{p.hidden=p.dataset.pagina!==id});
+    dash.setLink(id); window.__r2aba=id; window.__r2desenhar && window.__r2desenhar();
+  };
+  abas.forEach(b=>b.addEventListener('click',()=>mostrar(b.dataset.aba)));
+  const h=location.hash.slice(1); if(abas.some(b=>b.dataset.aba===h)) mostrar(h); else window.__r2aba='resumo';
+})();
+
+dash.calc('taxa',{inputs:['totais'],title:'Taxas de conversão',description:'Matrículas ÷ leads e efetivadas ÷ fichas, em %.',
+  fn:(totais)=>{const t=totais[0]; return [{conversao: Math.round(1000*t.matriculados/t.leads_total)/10+'%', efetivacao: Math.round(1000*t.efetivadas/t.fichas_total)/10+'%'}];}});
+
+(function(){
+  const fmt=d3.format(',');
+  const css=(v)=>getComputedStyle(document.getElementById('r2')).getPropertyValue(v).trim();
+  const ok=(id)=>dash.data(id).status==='ok';
+  const rows=(id)=>ok(id)?dash.data(id).data:[];
+  const brl=v=>'R$ '+Math.round(v).toLocaleString('pt-BR');
+  const dec=v=>v==null?'—':v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const hm=m=>m==null?'—':(m<60?Math.round(m)+' min':(Math.floor(m/60)+' h '+String(Math.round(m%60)).padStart(2,'0')+' min'));
+  const hh=v=>v==null?'—':(v<1?Math.round(v*60)+' min':v.toLocaleString('pt-BR',{maximumFractionDigits:1})+' h');
+  const txt=(id,s)=>{const el=document.getElementById(id); if(el) el.textContent=s;};
+
+  function tip(box){let t=box.querySelector('.r2-tip'); if(!t){t=document.createElement('div');t.className='r2-tip';t.hidden=true;box.appendChild(t);} return t;}
+
+  // barras horizontais genéricas (com dica ao passar o mouse e ao tocar)
+  function mostrarTip(box, tp, ev, lines){
+    tp.className='r2-tip multi'; tp.replaceChildren();
+    lines.forEach((t,i)=>{const d=document.createElement('div'); if(i===0){const b=document.createElement('b'); b.textContent=t; d.appendChild(b);} else d.textContent=t; tp.appendChild(d);});
+    tp.hidden=false; const r=box.getBoundingClientRect(); let px=ev.clientX-r.left+12; px=Math.max(0,Math.min(px, r.width-tp.offsetWidth-4)); tp.style.left=px+'px';
+    let py=ev.clientY-r.top+12; if(py+tp.offsetHeight>r.height+40) py=Math.max(0,ev.clientY-r.top-tp.offsetHeight-8); tp.style.top=py+'px';
+  }
+  function hbar(id, data, {label, value, value2, fmtv=fmt, cor, cor2, destaque, sufixo='', tip}={}){
+    const box=document.getElementById(id); if(!box) return; box.querySelectorAll('svg').forEach(s=>s.remove());
+    if(!data.length){return;}
+    const W=Math.max(280, box.clientWidth||600), rowH=34, m={t:6,r:56,b:6,l:10};
+    const svg=d3.select(box).append('svg').attr('width','100%').attr('viewBox',`0 0 ${W} ${data.length*rowH+m.t+m.b}`);
+    const tmp=svg.append('text').attr('font-size',13);
+    let lw=0; data.forEach(d=>{tmp.text(label(d)); lw=Math.max(lw, tmp.node().getComputedTextLength());}); tmp.remove();
+    lw=Math.min(lw, W*0.46); m.l=lw+14;
+    const max=d3.max(data, d=>Math.max(value(d), value2?value2(d):0))||1;
+    const x=d3.scaleLinear([0,max],[m.l, W-m.r]);
+    const g=svg.selectAll('g.l').data(data).join('g').attr('class','l').attr('transform',(d,i)=>`translate(0,${m.t+i*rowH})`);
+    g.append('text').attr('x',m.l-10).attr('y',rowH/2).attr('dy','0.35em').attr('text-anchor','end').text(d=>{let s=label(d); return s;}).each(function(){let el=this; while(el.getComputedTextLength()>lw && el.textContent.length>4){el.textContent=el.textContent.slice(0,-2)+'…';}});
+    if(value2){
+      g.append('rect').attr('x',m.l).attr('y',5).attr('height',rowH-10).attr('rx',4).attr('width',d=>Math.max(2,x(value2(d))-m.l)).attr('fill',css('--r2-azul-3'));
+    }
+    g.append('rect').attr('x',m.l).attr('y',value2?11:6).attr('height',value2?rowH-22:rowH-12).attr('rx',4).attr('width',d=>Math.max(2,x(value(d))-m.l)).attr('fill',(d,i)=>destaque&&destaque(d,i)?css('--r2-amarelo'):(cor||css('--r2-azul-2')));
+    g.append('text').attr('x',d=>x(Math.max(value(d), value2?value2(d):0))+6).attr('y',rowH/2).attr('dy','0.35em').attr('font-weight',600).text(d=>value2?`${fmtv(value(d))} de ${fmtv(value2(d))}`:fmtv(value(d))+sufixo);
+    const tp=tipoDe(box); box.__pin=null;
+    const linhas=d=>tip?tip(d):[label(d), value2?`${fmtv(value(d))} de ${fmtv(value2(d))}`:fmtv(value(d))+sufixo];
+    g.append('rect').attr('class','r2-hit').attr('x',0).attr('y',0).attr('width',W).attr('height',rowH).attr('fill','transparent')
+      .on('mousemove',(ev,d)=>{ if(box.__pin&&box.__pin!==d) return; mostrarTip(box,tp,ev,linhas(d)); })
+      .on('mouseleave',()=>{ if(!box.__pin) tp.hidden=true; })
+      .on('click',(ev,d)=>{ ev.stopPropagation(); if(box.__pin===d){box.__pin=null; tp.hidden=true;} else {box.__pin=d; mostrarTip(box,tp,ev,linhas(d));} });
+    if(!box.__fecha){ box.__fecha=true; document.addEventListener('click',()=>{ box.__pin=null; const t=box.querySelector('.r2-tip'); if(t) t.hidden=true; }); }
+  }
+  function tipoDe(box){let t=box.querySelector('.r2-tip'); if(!t){t=document.createElement('div');t.className='r2-tip multi';t.hidden=true;box.appendChild(t);} return t;}
+
+  // barras verticais
+  function vbar(id, data, {label, value, destaque, tickEvery=1}={}){
+    const box=document.getElementById(id); if(!box) return; box.querySelectorAll('svg').forEach(s=>s.remove()); const tp=tip(box);
+    if(!data.length) return;
+    const W=Math.max(280, box.clientWidth||600), H=220, m={t:22,r:8,b:30,l:8};
+    const svg=d3.select(box).append('svg').attr('width','100%').attr('viewBox',`0 0 ${W} ${H}`);
+    const x=d3.scaleBand(data.map(label),[m.l,W-m.r]).padding(0.22);
+    const y=d3.scaleLinear([0,d3.max(data,value)||1],[H-m.b,m.t]);
+    svg.append('g').attr('class','eixo').attr('transform',`translate(0,${H-m.b})`).call(d3.axisBottom(x).tickValues(data.map(label).filter((_,i)=>i%tickEvery===0)).tickSize(0)).attr('font-size',null).attr('font-family',null).call(g=>g.select('.domain').remove()).selectAll('text').attr('dy','1.1em');
+    svg.selectAll('rect.b').data(data).join('rect').attr('class','b').attr('x',d=>x(label(d))).attr('width',x.bandwidth()).attr('y',d=>y(value(d))).attr('height',d=>Math.max(1,y(0)-y(value(d)))).attr('rx',4)
+      .attr('fill',(d,i)=>destaque&&destaque(d,i)?css('--r2-amarelo'):css('--r2-azul-2'))
+      .on('mousemove',(ev,d)=>{tp.hidden=false; tp.textContent=`${label(d)}: ${fmt(value(d))} leads`; const r=box.getBoundingClientRect(); let px=ev.clientX-r.left+10; px=Math.min(px, r.width-tp.offsetWidth-4); tp.style.left=px+'px'; tp.style.top=(ev.clientY-r.top-30)+'px';})
+      .on('click',(ev,d)=>{ev.stopPropagation(); tp.hidden=false; tp.textContent=`${label(d)}: ${fmt(value(d))} leads`; const r=box.getBoundingClientRect(); tp.style.left=Math.min(ev.clientX-r.left+10, r.width-tp.offsetWidth-4)+'px'; tp.style.top=(ev.clientY-r.top-30)+'px';})
+      .on('mouseleave',()=>{tp.hidden=true;});
+    if(x.bandwidth()>16) svg.selectAll('text.v').data(data).join('text').attr('class','v').attr('x',d=>x(label(d))+x.bandwidth()/2).attr('y',d=>y(value(d))-5).attr('text-anchor','middle').attr('font-size',11).text(d=>value(d));
+  }
+
+  function lista(id, data, {campo='item', qtd='vezes', cit='exemplo'}={}){
+    const ul=document.getElementById(id); if(!ul) return; ul.replaceChildren();
+    const max=d3.max(data,d=>+d[qtd])||1;
+    data.forEach(d=>{const li=document.createElement('li');
+      const q=document.createElement('span'); q.className='qtd'; q.textContent=d[qtd];
+      const t=document.createElement('div'); t.className='txt';
+      const a=document.createElement('span'); a.className='tit'; a.textContent=d[campo]; t.appendChild(a);
+      if(d[cit]){const c=document.createElement('span'); c.className='cit'; c.textContent='“'+d[cit]+'”'; t.appendChild(c);}
+      const b=document.createElement('div'); b.className='r2-barra'; const i=document.createElement('i'); i.style.width=(100*d[qtd]/max)+'%'; b.appendChild(i); t.appendChild(b);
+      li.append(q,t); ul.appendChild(li);});
+  }
+
+  const n1=s=>s==='Sem consultor'?s:s.split(' ')[0];
+  const tipFunil=d=>{const fc=rows('funil_consultor').filter(x=>x.etapa===d.etapa).sort((a,b)=>b.cards-a.cards); const soma=d3.sum(fc,x=>x.cards); const l=[`${d.etapa}: ${fmt(d.cards)} cards`]; fc.forEach(x=>l.push(`${n1(x.consultor)}: ${fmt(x.cards)}`)); if(d.cards>soma) l.push(`Faltam ${d.cards-soma} cards de teste da roleta, que não aparecem na divisão.`); return l;};
+  const tipCons=d=>{const ordem=rows('funil').map(f=>f.etapa); const fc=rows('funil_consultor').filter(x=>x.consultor===d.consultor&&x.cards>0).sort((a,b)=>ordem.indexOf(a.etapa)-ordem.indexOf(b.etapa));
+    return [d.consultor,`Leads recebidos: ${d.leads}`,`Em aberto: ${d.em_aberto} · Perdidos: ${d.perdidos}`,`Matrículas: ${d.matriculados} (${String(d.conversao_pct).replace('.',',')}%)`,'Onde estão os cards:',...fc.map(x=>`${x.etapa}: ${x.cards}`)];};
+  const tipOrig=d=>[d.origem,`Leads: ${d.leads}`,`Conversaram: ${d.conversaram}`,`Chegaram na ficha: ${d.fichas} (${String(d.ficha_pct??Math.round(1000*d.fichas/d.leads)/10).replace('.',',')}%)`,`Matrículas: ${d.matriculados} (${String(d.conversao_pct).replace('.',',')}%)`,`Perdidos: ${d.perdidos}`];
+
+  function desenhar(){
+    const aba=window.__r2aba||'resumo';
+    document.querySelectorAll('.r2-num .val[data-source]').forEach(el=>{
+      const r=rows(el.dataset.source)[0]; const v=r?r[el.dataset.field]:undefined;
+      el.textContent = v===undefined||v===null ? '—' : (typeof v==='number' ? v.toLocaleString('pt-BR') : v);
+    });
+    const T=rows('totais')[0];
+    if(T){ txt('periodo', `Dados do CRM DKX de ${T.inicio.split('-').reverse().join('/')} a ${T.fim.split('-').reverse().join('/')}. Leitura de conversas reais dos consultores.`);
+      txt('ideia-resumo', `De ${fmt(T.leads_total)} leads, ${fmt(T.matriculados)} já viraram matrícula e ${fmt(T.em_aberto)} ainda estão em aberto. O maior volume parado está nas primeiras colunas: é ali que está o dinheiro.`);
+      txt('ideia-mat', `${fmt(T.efetivadas)} de ${fmt(T.fichas_total)} fichas já foram efetivadas pela Secretaria. ${fmt(T.aguardando_secretaria)} fichas esperam a Secretaria na primeira coluna.`);
+      txt('ideia-resgate', `${fmt(T.resgate_total)} cards foram para o Resgate e ${fmt(T.resgate_parados)} continuam em "Entrou no Resgate". Nenhum passou para Tentativa 1: o plantão de reativação ainda não está acontecendo dentro do CRM.`);
+    }
+    if(aba==='resumo'){ const f=rows('funil'); const mx=d3.max(f.filter(d=>!/Matriculado|Perdido/.test(d.etapa)),d=>d.cards);
+      hbar('ch-funil', f, {label:d=>d.etapa, value:d=>d.cards, destaque:d=>d.cards===mx, tip:tipFunil}); }
+    const C=rows('consultores');
+    if(C.length){ const top=[...C].sort((a,b)=>b.conversao_pct-a.conversao_pct)[0]; const low=[...C].sort((a,b)=>a.conversao_pct-b.conversao_pct)[0];
+      const mx=[...C].sort((a,b)=>b.leads-a.leads)[0]; const md=Math.round(d3.mean(C,d=>d.leads)); txt('ideia-cons', `${top.consultor} converte ${String(top.conversao_pct).replace('.',',')}% dos leads; ${low.consultor}, ${String(low.conversao_pct).replace('.',',')}%. Mesma roleta, resultados bem diferentes: vale ouvir como o ${top.consultor.split(' ')[0]} conduz o atendimento. Quanto à distribuição, ${mx.consultor.split(' ')[0]} recebeu ${mx.leads} leads, contra uma média de ${md}.`);}
+    if(aba==='consultores'){
+      const ord=[...C].sort((a,b)=>b.leads-a.leads); hbar('ch-cons-leads', ord, {label:d=>d.consultor, value:d=>d.leads, tip:tipCons});
+      const ordm=[...C].sort((a,b)=>b.matriculados-a.matriculados); const mm=d3.max(C,d=>d.matriculados);
+      hbar('ch-cons-mat', ordm, {label:d=>d.consultor, value:d=>d.matriculados, destaque:d=>d.matriculados===mm, tip:tipCons});
+      const pb=document.getElementById('tb-parados'); pb.replaceChildren();
+      rows('leads_parados').forEach(d=>{const tr=document.createElement('tr'); [d.consultor,d.abertos,d.novo_lead,d.sem_conversa,d.entre_8_e_14_dias,d.mais_de_15_dias].forEach((v,i)=>{const td=document.createElement('td'); if(i) td.className='num'; td.textContent=v; if(i===5&&v>=15){td.style.background='var(--r2-amarelo)'; td.style.fontWeight='700';} tr.appendChild(td);}); pb.appendChild(tr);});
+      const tb=document.getElementById('tb-cons'); tb.replaceChildren();
+      ord.forEach(d=>{const tr=document.createElement('tr'); ['consultor','leads','em_aberto','matriculados','perdidos','conversao_pct'].forEach((k,i)=>{const td=document.createElement('td'); if(i) td.className='num'; td.textContent=k==='conversao_pct'?d[k].toFixed(1).replace('.',','):d[k]; tr.appendChild(td);}); tb.appendChild(tr);});
+    }
+    const TR=rows('tempos_resposta');
+    if(TR.length){ const rap=[...TR].filter(d=>d.primeira_resposta_min!=null).sort((a,b)=>a.primeira_resposta_min-b.primeira_resposta_min); const len=rap[rap.length-1];
+      const fa=[...TR].filter(d=>d.ate_ficha_horas!=null).sort((a,b)=>a.ate_ficha_horas-b.ate_ficha_horas);
+      const rf=TR.find(d=>d.consultor===rap[0].consultor); txt('ideia-tempo', `${rap[0].consultor} é o mais rápido: responde o lead em ${hm(rap[0].primeira_resposta_min)} (mediana) e envia a ficha em ${hh(rf.ate_ficha_horas)}. ${len.consultor} demora ${hm(len.primeira_resposta_min)} para a primeira resposta. A diferença entre o mais rápido e o mais lento é de ${Math.round(len.primeira_resposta_min/rap[0].primeira_resposta_min)} vezes.`);
+      if(aba==='consultores'){ const tipT=d=>[d.consultor,`1ª resposta: ${hm(d.primeira_resposta_min)} (${d.n_primeira} leads medidos)`,`Responde em até 5 min: ${d.pct_ate_5min}% · até 1 h: ${d.pct_ate_1h}%`,`Nova mensagem: ${hm(d.retorno_min)}`,`Até a ficha: ${hh(d.ate_ficha_horas)} (${d.fichas_com_horario} fichas)`]; hbar('ch-t1', rap, {label:d=>d.consultor, value:d=>Math.round(d.primeira_resposta_min), fmtv:v=>hm(v), destaque:(d,i)=>i===0, tip:tipT});
+        hbar('ch-t3', fa, {label:d=>d.consultor, value:d=>d.ate_ficha_horas, fmtv:v=>hh(v), destaque:(d,i)=>i===0, tip:tipT});
+        const tb=document.getElementById('tb-tempo'); tb.replaceChildren();
+        [...TR].sort((a,b)=>(a.primeira_resposta_min??1e9)-(b.primeira_resposta_min??1e9)).forEach(d=>{const tr=document.createElement('tr'); [d.consultor,hm(d.primeira_resposta_min),d.pct_ate_5min+'%',d.pct_ate_1h+'%',d.pct_sem_resposta_humana+'%',hm(d.retorno_min),hh(d.ate_ficha_horas),d.fichas_com_horario].forEach((v,i)=>{const td=document.createElement('td'); if(i) td.className='num'; td.textContent=v; tr.appendChild(td);}); tb.appendChild(tr);});
+        const cp=document.getElementById('tb-comp'); cp.replaceChildren();
+        rows('comportamento').forEach(d=>{const tr=document.createElement('tr'); [d.consultor,d.conversas,String(d.msgs_consultor_por_conversa).replace('.',','),d.pct_audio+'%',d.pct_chegou_na_ficha+'%'].forEach((v,i)=>{const td=document.createElement('td'); if(i) td.className='num'; td.textContent=v; tr.appendChild(td);}); cp.appendChild(tr);}); } }
+    const O=rows('origens');
+    if(O.length){ const g=O.find(d=>/Google org/.test(d.origem)); const a=O.find(d=>d.origem==='Google Ads'); const top=[...O].filter(d=>d.leads>=10).sort((x,y)=>y.conversao_pct-x.conversao_pct)[0]; const meta=O.find(d=>d.origem==='Meta Ads');
+      if(g&&a) txt('ideia-orig', `O Google traz a maior parte: ${fmt(g.leads)} leads pela busca orgânica (${String(g.conversao_pct).replace('.',',')}% viram matrícula) e ${fmt(a.leads)} por anúncio (${String(a.conversao_pct).replace('.',',')}%). As maiores conversões vêm de quem já conhece a R2: ${top.origem} (${String(top.conversao_pct).replace('.',',')}%), mas são poucos contatos.`);}
+    if(aba==='origens'){ const tb=document.getElementById('tb-orig'); tb.replaceChildren();
+      [...O].sort((a,b)=>b.leads-a.leads).forEach(d=>{const tr=document.createElement('tr'); [d.origem,d.leads,d.conversaram,d.fichas,d.matriculados,String(d.conversao_pct).replace('.',',')].forEach((v,i)=>{const td=document.createElement('td'); if(i) td.className='num'; td.textContent=v; tr.appendChild(td);}); tb.appendChild(tr);}); }
+    if(aba==='origens'){
+      hbar('ch-orig-leads', [...O].sort((a,b)=>b.leads-a.leads), {label:d=>d.origem, value:d=>d.leads, tip:tipOrig});
+      const oc=O.filter(d=>d.leads>=10).sort((a,b)=>b.conversao_pct-a.conversao_pct); const mc=d3.max(oc,d=>d.conversao_pct);
+      hbar('ch-orig-conv', oc, {label:d=>d.origem, value:d=>d.conversao_pct, fmtv:v=>v.toFixed(1).replace('.',','), sufixo:'%', destaque:d=>d.conversao_pct===mc, tip:tipOrig});
+      const D=rows('leads_por_dia').map(d=>({...d, dt:new Date(d.dia+'T12:00:00Z')}));
+      vbar('ch-dia', D, {label:d=>d3.utcFormat('%d/%m')(d.dt), value:d=>d.leads, destaque:d=>[0,6].includes(d.dt.getUTCDay())});
+      vbar('ch-semana', rows('leads_por_dia_semana'), {label:d=>d.dia_semana.slice(0,3), value:d=>d.leads, destaque:d=>/Sáb|Dom/.test(d.dia_semana)});
+      vbar('ch-hora', rows('leads_por_hora'), {label:d=>String(d.hora).padStart(2,'0')+'h', value:d=>d.leads, destaque:d=>d.hora>=18, tickEvery:3});
+    }
+    if(aba==='matriculas'){ hbar('ch-mat-cons', [...C].sort((a,b)=>b.fichas-a.fichas), {label:d=>d.consultor, value:d=>d.efetivadas, value2:d=>d.fichas, tip:d=>[d.consultor,`Fichas preenchidas: ${d.fichas}`,`Matrículas efetivadas: ${d.efetivadas}`,`Aguardando a Secretaria: ${d.aguardando}`,`Efetivação: ${Math.round(100*d.efetivadas/d.fichas)}%`]}); }
+    // cursos
+    const A=rows('amostra'); if(A.length){ const tot=d3.sum(A,d=>d.conversas_lidas); const totc=d3.sum(A,d=>d.cards); txt('amostra-cursos', `Baseado na leitura de ${fmt(tot)} conversas de WhatsApp dos consultores (todas as que existem nos ${fmt(totc)} cards do funil; ${fmt(totc-tot)} cards não têm conversa registrada).`);
+      txt('rodape', `Fontes: lista de cards do CRM DKX de 19/10 (leads, fichas, matrículas, origens, dias e horários) e leitura de todas as conversas de WhatsApp com mensagens (${fmt(tot)} conversas em ${fmt(totc)} cards; cards de teste ficaram fora). Áudios sem transcrição não puderam ser lidos. Tempos de resposta são medianas calculadas nos horários das mensagens e incluem noite e fim de semana.`);}
+    const K=rows('cursos');
+    if(K.length){ const s=[...K].sort((a,b)=>b.procurados-a.procurados); const f=[...K].sort((a,b)=>b.fechados-a.fechados)[0];
+      txt('ideia-cursos', `${s[0].curso} é o mais procurado (${s[0].procurados} conversas). O que mais fecha é ${f.curso} (${f.fechados}).`);
+      if(aba==='cursos') hbar('ch-cursos', s.slice(0,14), {label:d=>d.curso, value:d=>d.fechados, value2:d=>d.procurados, tip:d=>[d.curso,`Conversas em que foi pedido: ${d.procurados}`,`Chegaram a ficha ou matrícula: ${d.fechados}`,`Taxa: ${Math.round(100*d.fechados/d.procurados)}%`]}); }
+    if(aba==='cursos'){ lista('ls-faltantes', rows('cursos_faltantes'), {campo:'curso', qtd:'pedidos', cit:''}); lista('ls-perfil', rows('perfil_origem'), {campo:'graduacao', qtd:'leads', cit:''}); }
+    const OB=rows('objecoes'); if(OB.length){ const s=[...OB].sort((a,b)=>b.vezes-a.vezes); txt('ideia-obj', `A objeção nº 1 é “${s[0].item}” (${s[0].vezes} conversas), seguida de “${s[1].item}” (${s[1].vezes}) e “${s[2].item}” (${s[2].vezes}). Ter a resposta pronta para as três primeiras resolve a maior parte das travas.`); if(aba==='objecoes') lista('ls-obj', s); }
+    if(aba==='objecoes'){ const FT=rows('followup_toques'); const totFT=d3.sum(FT,d=>d.conversas); hbar('ch-toques', FT, {label:d=>d.toques, value:d=>d.conversas, destaque:d=>/Nenhum|1 toque/.test(d.toques), tip:d=>[d.toques,`${d.conversas} conversas (${Math.round(100*d.conversas/totFT)}%)`]});
+      hbar('ch-parou', [...rows('onde_parou')].sort((a,b)=>b.conversas-a.conversas), {label:d=>d.ponto, value:d=>d.conversas});
+      const M=[...rows('motivos_perda')].sort((a,b)=>b.cards-a.cards); hbar('ch-motivos', M, {label:d=>d.motivo, value:d=>d.cards}); }
+    if(aba==='cursos') hbar('ch-estados', [...rows('estados')].sort((a,b)=>b.leads-a.leads).slice(0,12), {label:d=>d.estado, value:d=>d.leads, destaque:(d,i)=>i<3});
+    const OBJ2=rows('objecoes'); const gi=(r)=>{const x=OBJ2.find(d=>r.test(d.item)); return x?x.vezes:0;};
+    if(OBJ2.length){ const DUV2=rows('duvidas'); const pol=(DUV2.find(d=>/polo/i.test(d.item))||{}).vezes||0; const dis=(rows('dores').find(d=>/Dist/i.test(d.item))||{}).vezes||0;
+      txt('ideia-online', `O curso tem uma parte presencial por regra do MEC: isso não depende da R2 e não é um produto a criar. Mesmo assim, trava vendas: ${fmt(pol)} conversas tiveram dúvida sobre presencial ou polo, ${fmt(dis)} citaram a distância como dor, ${fmt(gi(/presencial|polo/i))} desistiram por não conseguir ir e ${fmt(gi(/100% online/i))} pediram curso 100% online. A saída é abrir polos ou parcerias em outros estados, onde há demanda sem cobertura.`); }
+    const plano=(id,fonte)=>{ const box=document.getElementById(id); if(!box) return; box.replaceChildren();
+      let est={}; try{ est=JSON.parse(localStorage.getItem('r2_decisao_'+fonte)||'{}'); }catch(e){}
+      const salva=()=>{ try{ localStorage.setItem('r2_decisao_'+fonte, JSON.stringify(est)); }catch(e){} };
+      const OPC=[['aprovar','Aprovar'],['ajustar','Ajustar'],['adiar','Adiar']];
+      let grupo=null;
+      [...rows(fonte)].sort((a,b)=>a.ordem-b.ordem).forEach(d=>{
+        if(d.grupo&&d.grupo!==grupo){ grupo=d.grupo; const g=document.createElement('h3'); g.className='r2-grupo'; g.textContent=grupo; box.appendChild(g); }
+        const el=document.createElement('div'); el.className='r2-acao'+(d.urgente?' urg':''); const ic=document.createElement('div'); ic.className='ic'; ic.textContent=d.ordem;
+        const t=document.createElement('div'); const hh4=document.createElement('h4'); hh4.textContent=d.titulo; t.appendChild(hh4);
+        if(d.origem){ const o=document.createElement('p'); o.className='r2-origem'; o.textContent='De onde vem a ideia: '+d.origem; t.appendChild(o); }
+        [['Por quê',d.porque],['Como',d.como],['Meta e prazo',d.meta+' Prazo: '+d.prazo+'.']].forEach(([a,b])=>{ const p=document.createElement('p'); const e=document.createElement('b'); e.textContent=a+': '; p.append(e,document.createTextNode(b)); t.appendChild(p); });
+        const bar=document.createElement('div'); bar.className='r2-decisao'; const rot=document.createElement('span'); rot.textContent='Sua decisão:'; bar.appendChild(rot);
+        OPC.forEach(([k,txt2])=>{ const b=document.createElement('button'); b.type='button'; b.id='dec-'+d.ordem+'-'+k; b.textContent=txt2; b.setAttribute('aria-pressed', String(est[d.ordem]===k));
+          b.addEventListener('click',()=>{ est[d.ordem]=(est[d.ordem]===k?null:k); salva(); bar.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', String(est[d.ordem]===x.dataset.k))); resumo(); }); b.dataset.k=k; bar.appendChild(b); });
+        t.appendChild(bar); el.append(ic,t); box.appendChild(el); });
+      const res=document.createElement('div'); res.className='r2-resumo-dec'; const out=document.createElement('p'); out.id='dec-resumo'; const cp=document.createElement('button'); cp.type='button'; cp.id='dec-copiar'; cp.textContent='Copiar minhas decisões';
+      const resumo=()=>{ const l=[...rows(fonte)].sort((a,b)=>a.ordem-b.ordem).filter(d=>est[d.ordem]).map(d=>d.ordem+'. '+d.titulo+': '+({aprovar:'aprovado',ajustar:'ajustar',adiar:'adiar'}[est[d.ordem]])); out.textContent=l.length?(l.length+' de '+rows(fonte).length+' ideias com decisão.'):'Nenhuma decisão marcada ainda. As marcações ficam só neste navegador.'; return l; };
+      cp.addEventListener('click',()=>{ const txt3=resumo().join('\n')||'Nenhuma decisão marcada.'; const fb=()=>{ const ta=document.createElement('textarea'); ta.value=txt3; ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} ta.remove(); };
+        try{ navigator.clipboard.writeText(txt3).then(()=>{cp.textContent='Copiado';}).catch(fb); }catch(e){ fb(); } setTimeout(()=>{cp.textContent='Copiar minhas decisões';},2000); });
+      res.append(out,cp); box.appendChild(res); resumo(); };
+    if(aba==='vendas'){
+      const FUD=rows('funil').filter(d=>/Follow-up/.test(d.etapa)); const gat={'Follow-up 1':218,'Follow-up 2':50,'Follow-up 3':24};
+      hbar('ch-fu', FUD, {label:d=>d.etapa, value:d=>d.cards, tip:d=>[d.etapa,`${d.cards} cards na coluna`,`Frase da cadência reconhecida pelo sistema: ${gat[d.etapa]||0} vezes`]});
+      const tc=document.getElementById('tb-cad'); tc.replaceChildren();
+      rows('cadencia_tabela').sort((a,b)=>a.ordem-b.ordem).forEach(d=>{const tr=document.createElement('tr'); [d.situacao,d.toque,d.texto,d.move,d.sugestao].forEach((v,i)=>{const td=document.createElement('td'); td.textContent=v; if(i===3){td.style.fontWeight='700'; if(v==='Sim'){td.style.color='var(--r2-azul)';} else if(v==='Não'){td.style.background='var(--r2-amarelo-claro)';}} tr.appendChild(td);}); tc.appendChild(tr);});
+      plano('ls-vendas','plano_vendas'); }
+  }
+  window.__r2desenhar=desenhar;
+  dash.onData(desenhar);
+})();
+</script>
+
+</body>
+</html>
